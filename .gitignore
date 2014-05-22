@@ -7,5 +7,6 @@ pom.xml
 .lein-deps-sum
 .lein-repl-history
 .lein-plugins/
+.lein-failures
 .nrepl-port
-vivo_widgets_reporter.development.js
+vivo_widgets_reporter.*.js

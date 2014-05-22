@@ -8,6 +8,6 @@
 
 (om/root
   (fn [app owner]
-    (dom/h1 nil (:text app)))
+    (dom/h1 nil "Scholars Report"))
   app-state
   {:target (. js/document (getElementById "app"))})
