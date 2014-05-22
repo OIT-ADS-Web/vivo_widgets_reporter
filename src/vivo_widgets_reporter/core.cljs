@@ -1,20 +1,28 @@
 (ns vivo_widgets_reporter.core
   (:require [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]
-            [cljs.core.async :refer [put! chan <!]]
+            [goog.net.Jsonp]
             ))
 
 (enable-console-print!)
 
 (def app-state (atom {
-  :faculty-uri "https://scholars.duke.edu/individual/per2051062"
+  :faculty-uri "https://scholars.duke.edu/individual/per4284062"
   :include-overview true
   }))
 
-(defn generate-report [{:keys [include-overview]}]
-  (if include-overview
-    "overview here"
-    "overview not here"
+(defn set-overview [json owner]
+  (om/set-state! owner :overview (:overview (first (js->clj json :keywordize-keys true))))
+  )
+
+(defn get-overview [owner]
+  (let [url "https://scholars.duke.edu/widgets/api/v0.9/people/overview/5.jsonp?uri=https://scholars.duke.edu/individual/per4284062"]
+    (.send (goog.net.Jsonp. url) "" #(set-overview % owner))
+    )
+  )
+
+(defn generate-report [{:keys [overview include-overview]}]
+  (if include-overview overview
     )
   )
 
@@ -26,7 +34,13 @@
   (reify
     om/IInitState
     (init-state [_]
-      {:include-overview true}
+      {:include-overview true
+       :overview ""
+       }
+      )
+    om/IWillMount
+    (will-mount [this]
+      (get-overview owner)
       )
     om/IRenderState
     (render-state [this state]
