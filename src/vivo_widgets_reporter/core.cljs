@@ -10,8 +10,8 @@
 (def app-state (atom {
   }))
 
-(defn base-url [type]
-  (str "https://scholars-test.oit.duke.edu/widgets/api/v0.9/people/" type "/all.jsonp?uri="))
+(def base-url
+  "https://scholars-test.oit.duke.edu/widgets/api/v0.9/people/complete/all.jsonp?uri=")
 
 (defn create-heading [ {:keys [prefixName firstName lastName]} ]
   (str "Scholars Report for " prefixName " " firstName " " lastName)
@@ -21,41 +21,45 @@
   (str preferredTitle)
   )
 
-(defn set-overview [json owner]
-  (let [json-in-clojure (first (js->clj json :keywordize-keys true))]
-    (om/set-state! owner :overview (:overview json-in-clojure))
-    (om/set-state! owner :heading (create-heading json-in-clojure))
-    (om/set-state! owner :subheading (create-subheading json-in-clojure))
-    )
-  )
-
-(defn parse-appointments [json]
-  (.log js/console (str json))
+(defn parse-labels [json]
   (string/join "\n\n" (map :label json))
   )
 
 (defn set-appointments [json owner]
+  (om/set-state! owner :appointments (parse-labels json))
+  )
+
+(defn set-overview [json owner]
+  (om/set-state! owner :overview (:overview json))
+  (om/set-state! owner :heading (create-heading json))
+  (om/set-state! owner :subheading (create-subheading json))
+  )
+
+(defn set-geofoci [json owner]
+  (om/set-state! owner :geofoci (parse-labels json))
+  )
+
+(defn set-fields [json owner]
   (let [json-in-clojure (js->clj json :keywordize-keys true)]
-    (om/set-state! owner :appointments (parse-appointments json-in-clojure))
+    (set-overview (:attributes json-in-clojure) owner)
+    (set-appointments (:positions json-in-clojure) owner)
+    (set-geofoci (:geographicalFocus json-in-clojure) owner)
     )
   )
 
-(defn get-overview [owner]
-  (let [url (str (base-url "overview") (om/get-state owner :faculty-uri))]
-    (.send (goog.net.Jsonp. url) "" #(set-overview % owner))
+(defn get-fields [owner]
+  (let [url (str base-url (om/get-state owner :faculty-uri))]
+    (.send (goog.net.Jsonp. url) "" #(set-fields % owner))
     )
   )
 
-(defn get-appointments [owner]
-  (let [url (str (base-url "positions") (om/get-state owner :faculty-uri))]
-    (.send (goog.net.Jsonp. url) "" #(set-appointments % owner))
-    )
-  )
-
-(defn generate-report [{:keys [overview include-overview include-appointments appointments]}]
+(defn generate-report [{:keys [include-overview overview 
+                               include-appointments appointments
+                               include-geofoci geofoci]}]
   (str
     (if include-appointments (str appointments "\n\n"))
-    (if include-overview overview)
+    (if include-overview     (str overview     "\n\n"))
+    (if include-geofoci      geofoci)
    )
   )
 
@@ -68,22 +72,18 @@
     om/IInitState
     (init-state [_]
       {
-       :faculty-uri "https://scholars.duke.edu/individual/per2051062"
+       :faculty-uri "https://scholars.duke.edu/individual/per4284062"
 
        :heading "Scholars Report"
-       :subheading ""
 
        :include-overview true
        :include-appointments true
-
-       :overview ""
-       :appointments ""
+       :include-geofoci true
        }
       )
     om/IWillMount
     (will-mount [this]
-      (get-overview owner)
-      (get-appointments owner)
+      (get-fields owner)
       )
     om/IRenderState
     (render-state [this state]
@@ -98,6 +98,10 @@
           #js {:type "checkbox" :checked (:include-appointments state)
                :onChange #(update-preference % owner :include-appointments) }
           "Appointments")
+        (dom/input
+          #js {:type "checkbox" :checked (:include-geofoci state)
+               :onChange #(update-preference % owner :include-geofoci) }
+          "Geographical Focus")
         (dom/div nil
           (dom/textarea
             #js {:value (generate-report state)
