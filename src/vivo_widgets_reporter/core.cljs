@@ -1,15 +1,17 @@
 (ns vivo_widgets_reporter.core
   (:require [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]
+            [clojure.string :as string]
             [goog.net.Jsonp]
             ))
 
 (enable-console-print!)
 
 (def app-state (atom {
-  :faculty-uri "https://scholars.duke.edu/individual/per4284062"
-  :include-overview true
   }))
+
+(defn base-url [type]
+  (str "https://scholars-test.oit.duke.edu/widgets/api/v0.9/people/" type "/all.jsonp?uri="))
 
 (defn create-heading [ {:keys [prefixName firstName lastName]} ]
   (str "Scholars Report for " prefixName " " firstName " " lastName)
@@ -27,15 +29,34 @@
     )
   )
 
+(defn parse-appointments [json]
+  (.log js/console (str json))
+  (string/join "\n\n" (map :label json))
+  )
+
+(defn set-appointments [json owner]
+  (let [json-in-clojure (js->clj json :keywordize-keys true)]
+    (om/set-state! owner :appointments (parse-appointments json-in-clojure))
+    )
+  )
+
 (defn get-overview [owner]
-  (let [url "https://scholars.duke.edu/widgets/api/v0.9/people/overview/5.jsonp?uri=https://scholars.duke.edu/individual/per4284062"]
+  (let [url (str (base-url "overview") (om/get-state owner :faculty-uri))]
     (.send (goog.net.Jsonp. url) "" #(set-overview % owner))
     )
   )
 
-(defn generate-report [{:keys [overview include-overview]}]
-  (if include-overview overview
+(defn get-appointments [owner]
+  (let [url (str (base-url "positions") (om/get-state owner :faculty-uri))]
+    (.send (goog.net.Jsonp. url) "" #(set-appointments % owner))
     )
+  )
+
+(defn generate-report [{:keys [overview include-overview include-appointments appointments]}]
+  (str
+    (if include-appointments (str appointments "\n\n"))
+    (if include-overview overview)
+   )
   )
 
 (defn update-preference [e owner preference]
@@ -46,15 +67,23 @@
   (reify
     om/IInitState
     (init-state [_]
-      {:include-overview true
-       :overview ""
+      {
+       :faculty-uri "https://scholars.duke.edu/individual/per2051062"
+
        :heading "Scholars Report"
        :subheading ""
+
+       :include-overview true
+       :include-appointments true
+
+       :overview ""
+       :appointments ""
        }
       )
     om/IWillMount
     (will-mount [this]
       (get-overview owner)
+      (get-appointments owner)
       )
     om/IRenderState
     (render-state [this state]
@@ -65,6 +94,10 @@
           #js {:type "checkbox" :checked (:include-overview state)
                :onChange #(update-preference % owner :include-overview) }
           "Overview")
+        (dom/input
+          #js {:type "checkbox" :checked (:include-appointments state)
+               :onChange #(update-preference % owner :include-appointments) }
+          "Appointments")
         (dom/div nil
           (dom/textarea
             #js {:value (generate-report state)
