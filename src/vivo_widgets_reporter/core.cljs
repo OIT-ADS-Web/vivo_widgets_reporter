@@ -26,17 +26,17 @@
   )
 
 (defn set-appointments [json owner]
-  (om/set-state! owner :appointments (parse-labels json))
+  (om/set-state! owner :appointments (str "Appointments\n\n" (parse-labels json)))
   )
 
 (defn set-overview [json owner]
-  (om/set-state! owner :overview (:overview json))
+  (om/set-state! owner :overview (str "Overview\n\n" (:overview json)))
   (om/set-state! owner :heading (create-heading json))
   (om/set-state! owner :subheading (create-subheading json))
   )
 
 (defn set-geofoci [json owner]
-  (om/set-state! owner :geofoci (parse-labels json))
+  (om/set-state! owner :geofoci (str "Geographical Focus\n\n" (parse-labels json)))
   )
 
 (defn set-fields [json owner]
