@@ -21,8 +21,25 @@
   (str preferredTitle)
   )
 
+(defn pub-citation [{:keys [label attributes] :as json}]
+  (.log js/console json)
+  (str (:authorList attributes)
+       ". "
+       label
+       " "
+       (:publishedIn attributes)
+       ". "
+       (string/join (take 4 (:year attributes)))
+       "."
+       )
+  )
+
 (defn parse-labels [json]
   (string/join "\n\n" (map :label json))
+  )
+
+(defn parse-publications [json]
+  (string/join "\n\n" (map #(pub-citation %) json))
   )
 
 (defn set-appointments [json owner]
@@ -39,11 +56,16 @@
   (om/set-state! owner :geofoci (str "Geographical Focus\n\n" (parse-labels json)))
   )
 
+(defn set-publications [json owner]
+  (om/set-state! owner :publications (str "Publications\n\n" (parse-publications json)))
+  )
+
 (defn set-fields [json owner]
   (let [json-in-clojure (js->clj json :keywordize-keys true)]
     (set-overview (:attributes json-in-clojure) owner)
     (set-appointments (:positions json-in-clojure) owner)
     (set-geofoci (:geographicalFocus json-in-clojure) owner)
+    (set-publications (:publications json-in-clojure) owner)
     )
   )
 
@@ -55,11 +77,13 @@
 
 (defn generate-report [{:keys [include-overview overview 
                                include-appointments appointments
+                               include-publications publications
                                include-geofoci geofoci]}]
   (str
     (if include-appointments (str appointments "\n\n"))
     (if include-overview     (str overview     "\n\n"))
-    (if include-geofoci      geofoci)
+    (if include-geofoci      (str geofoci      "\n\n"))
+    (if include-publications (str publications "\n\n"))
    )
   )
 
@@ -79,6 +103,7 @@
        :include-overview true
        :include-appointments true
        :include-geofoci true
+       :include-publications true
        }
       )
     om/IWillMount
@@ -102,6 +127,10 @@
           #js {:type "checkbox" :checked (:include-geofoci state)
                :onChange #(update-preference % owner :include-geofoci) }
           "Geographical Focus")
+        (dom/input
+          #js {:type "checkbox" :checked (:include-publications state)
+               :onChange #(update-preference % owner :include-publications) }
+          "Publications")
         (dom/div nil
           (dom/textarea
             #js {:value (generate-report state)
