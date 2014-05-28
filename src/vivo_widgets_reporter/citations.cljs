@@ -12,6 +12,7 @@
 
 (defn journal-citation [{label :label {:keys [authorList
                                               publishedIn
+                                              publishedBy
                                               volume
                                               issue
                                               year
@@ -19,7 +20,8 @@
                                               endPage]} :attributes}]
   (str (cite-authors authorList)
        label ". "
-       publishedIn " "
+       (if publishedIn (str publishedIn " ")
+         (if publishedBy (str publishedBy " ")))
        volume
        (if issue (str ", no. " issue))
        (if (or volume issue) " ")

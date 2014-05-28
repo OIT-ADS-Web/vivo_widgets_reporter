@@ -29,11 +29,16 @@
                                 :authorList "Doe, J",
                                 :endPage "277"}})
 
-(deftest journal-citation-without-volume
+(deftest journal
   (let [data base-journal]
     (is (= (src/pub-citation data)
         "Doe, J. The Article Title. The Journal (2013): 259-277.")
         )))
+
+(deftest journal-with-published-by
+  (let [data (assoc-in (dissoc-in base-journal [:attributes :publishedIn]) [:attributes :publishedBy] "Another Publisher")]
+    (is (= (src/pub-citation data)
+        "Doe, J. The Article Title. Another Publisher (2013): 259-277."))))
 
 (deftest journal-citation-with-volume
   (let [data (assoc-in base-journal [:attributes :volume] "1")]
