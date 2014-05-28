@@ -65,8 +65,10 @@
 
 (deftest book-without-author-list
   (let [data (dissoc-in base-book [:attributes :authorList])]
-    (println data)
     (is (= (src/pub-citation data)
-           "The Book Title. 2007."))
-    )
-  )
+           "The Book Title. 2007."))))
+
+(deftest book-with-blank-author-list
+  (let [data (assoc-in base-book [:attributes :authorList] "")]
+    (is (= (src/pub-citation data)
+           "The Book Title. 2007."))))
