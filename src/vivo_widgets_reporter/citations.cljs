@@ -2,13 +2,21 @@
   (:require [clojure.string :as string])
   )
 
-(defn journal-citation [{:keys [label attributes]}]
-  (str (:authorList attributes) ". "
+(defn journal-citation [{label :label {:keys [authorList
+                                              publishedIn
+                                              volume
+                                              issue
+                                              year
+                                              startPage
+                                              endPage]} :attributes}]
+  (str authorList ". "
        label ". "
-       (:publishedIn attributes) " "
-       ;(:volume attributes) ", no. " (:issue attributes) " "
-       "(" (string/join (take 4 (:year attributes))) "): "
-       (:startPage attributes) "-" (:endPage attributes)
+       publishedIn " "
+       volume
+       (if issue (str ", no. " issue))
+       (if (or volume issue) " ")
+       "(" (string/join (take 4 year )) "): "
+       startPage "-" endPage 
        "."
        )
   )
