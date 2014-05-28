@@ -9,7 +9,7 @@
                                               year
                                               startPage
                                               endPage]} :attributes}]
-  (str authorList ". "
+  (str (if authorList (str authorList ". "))
        label ". "
        publishedIn " "
        volume
@@ -21,10 +21,11 @@
        )
   )
 
-(defn book-citation [{:keys [label attributes]}]
-  (str (:authorList attributes) ". "
+(defn book-citation [{label :label {:keys [authorList year publishedBy]} :attributes}]
+  (str (if authorList (str authorList ". "))
        label ". "
-       (string/join (take 4 (:year attributes))) "."
+       (if publishedBy (str publishedBy ", "))
+       (string/join (take 4 year)) "."
        )
   )
 
@@ -32,7 +33,7 @@
   (cond
     (re-matches #".*AcademicArticle" vivoType) (journal-citation json)
     (re-matches #".*Book" vivoType) (book-citation json)
-    :else "no such type\n\n"
+    ;:else (.log js/console json)
     )
   )
 
