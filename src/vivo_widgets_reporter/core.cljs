@@ -81,6 +81,9 @@
 
 (defn body [app owner]
   (reify
+    om/IDisplayName
+    (display-name [this]
+      "Body")
     om/IInitState
     (init-state [_]
       {
