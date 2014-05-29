@@ -48,12 +48,17 @@
   (om/set-state! owner :publications (str "Publications\n\n" (parse-publications json)))
   )
 
+(defn set-art-works [json owner]
+  (om/set-state! owner :art-works (str "Artistic Works\n\n" json))
+  )
+
 (defn set-fields [json owner]
   (let [json-in-clojure (js->clj json :keywordize-keys true)]
     (set-overview (:attributes json-in-clojure) owner)
     (set-appointments (:positions json-in-clojure) owner)
     (set-geofoci (:geographicalFocus json-in-clojure) owner)
     (set-publications (:publications json-in-clojure) owner)
+    (set-art-works (:artisticWorks json-in-clojure) owner)
     )
   )
 
@@ -66,12 +71,14 @@
 (defn generate-report [{:keys [include-overview overview 
                                include-appointments appointments
                                include-publications publications
+                               include-art-works art-works
                                include-geofoci geofoci]}]
   (str
     (if include-appointments (str appointments "\n\n"))
     (if include-overview     (str overview     "\n\n"))
     (if include-geofoci      (str geofoci      "\n\n"))
     (if include-publications (str publications "\n\n"))
+    (if include-art-works    (str art-works    "\n\n"))
    )
   )
 
@@ -106,7 +113,8 @@
        :include-overview false
        :include-appointments false
        :include-geofoci false
-       :include-publications true
+       :include-publications false
+       :include-art-works true
        }
       )
     om/IWillMount
@@ -123,6 +131,7 @@
           (include-checkbox owner state :include-appointments "Appointments")
           (include-checkbox owner state :include-geofoci "Geographical Focus")
           (include-checkbox owner state :include-publications "Publications")
+          (include-checkbox owner state :include-art-works "Artistic Works")
           )
         (dom/div nil
           (dom/textarea
