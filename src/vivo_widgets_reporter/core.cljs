@@ -80,7 +80,7 @@
   )
 
 (defn requested-uri []
-  (string/replace (str (.. js/document -location -search)) #"\?" "")
+  (string/replace (str (.. js/document -location -search)) #"\?uri=" "")
   )
 
 (defn body [app owner]
@@ -108,24 +108,26 @@
     om/IRenderState
     (render-state [this state]
       (dom/div nil
-        (dom/h1 nil (:heading state))
+        (dom/h2 nil (:heading state))
         (dom/p nil (:subheading state))
-        (dom/input
-          #js {:type "checkbox" :checked (:include-overview state)
-               :onChange #(update-preference % owner :include-overview) }
-          "Overview")
-        (dom/input
-          #js {:type "checkbox" :checked (:include-appointments state)
-               :onChange #(update-preference % owner :include-appointments) }
-          "Appointments")
-        (dom/input
-          #js {:type "checkbox" :checked (:include-geofoci state)
-               :onChange #(update-preference % owner :include-geofoci) }
-          "Geographical Focus")
-        (dom/input
-          #js {:type "checkbox" :checked (:include-publications state)
-               :onChange #(update-preference % owner :include-publications) }
-          "Publications")
+        (dom/form #js {:className "form-inline"}
+          (dom/input
+            #js {:type "checkbox" :checked (:include-overview state)
+                 :onChange #(update-preference % owner :include-overview) }
+            "Overview")
+          (dom/input
+            #js {:type "checkbox" :checked (:include-appointments state)
+                 :onChange #(update-preference % owner :include-appointments) }
+            "Appointments")
+          (dom/input
+            #js {:type "checkbox" :checked (:include-geofoci state)
+                 :onChange #(update-preference % owner :include-geofoci) }
+            "Geographical Focus")
+          (dom/input
+            #js {:type "checkbox" :checked (:include-publications state)
+                 :onChange #(update-preference % owner :include-publications) }
+            "Publications")
+                  )
         (dom/div nil
           (dom/textarea
             #js {:value (generate-report state)

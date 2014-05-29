@@ -1,0 +1,395 @@
+// Colors
+$light-blue: #235F9C;
+$dark-blue: #064D68;
+$bright-green: #A1B70D;
+
+// Resets
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, code, del, dfn, em, img, q, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+  color: #595B5B;
+  font-weight: normal;
+  padding: 0;
+}
+
+form {margin: 0;}
+
+html, body, input, button {
+  font-family: "Lucida Sans Unicode","Lucida Grande",Geneva,helvetica,sans-serif;
+}
+
+body {
+  background: url("/vivo_admin/assets/header-background.png") no-repeat scroll center 0;
+}
+
+section {padding: 0 10px;}
+
+a {
+    color: $light-blue;
+}
+
+h2 {
+  color: $bright-green;
+  font-weight: bold;
+  line-height: auto;
+}
+
+h3 {
+  font-weight: normal;
+  line-height: inherit;
+}
+
+
+h2, h3 {font-size: 1.5em;}
+
+h3, h6{color: $dark-blue}
+
+h4 {font-size: 15.5px;}
+
+h6{
+  font-size: 1em;
+  padding-top: 0;
+  margin: 10px 0 4px;
+}
+
+.navbar {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+
+.navbar .nav > li > a {
+  padding:  10px 5px;
+}
+
+.navbar li a.selected {
+    background: url("/vivo_admin/assets/selected-main-nav.jpg") no-repeat scroll 0 -4px transparent;
+    color: #002B44;
+    padding-left: 13px;
+}
+
+.breadcrumb {
+  background-color: inherit;
+  font-size: small;
+  padding: 0;
+  margin-bottom: 0;
+}
+
+#content {
+   padding-left: 5%;
+   min-height: 300px;
+}
+
+.row-fluid [class*="span"] {
+  margin-left: 0;
+}
+
+.keyword-source {
+  float: right;
+}
+
+.btn-success {
+  background: url("/vivo_admin/assets/alert-overlay.png") repeat-x scroll 0 0 #749A02;
+}
+
+.btn-success:hover {background: #B2D15A;}
+
+.list-date {
+  margin-left: 0.5%;
+  padding: 0.1em 0.8em;
+  background-color: #F4F4F4;
+  font-size: smaller;
+}
+
+.hidden {display: none !important;}
+
+[class^="icon-"]:before {text-decoration: none;}
+a[class^="edit-"] {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.field_with_errors label {color: red;}
+
+.required:before {
+  color: red;
+  content: '* ';
+  font-size: large;
+  vertical-align: -5px;
+}
+
+// Header
+.navbar img.brand {
+  padding: 27px 10px 10px 0;
+}
+
+#header-search {
+    position: absolute;
+    right: 17%;
+    top: 40px;
+}
+
+#header-navbar-inner li {
+  margin: 10px 0;
+  border-right: 1px solid #7C7D7F;
+  a, p {
+    color: #ffffff;
+    text-shadow: none;
+    font-size: 78%;
+  }
+  a:hover, a:active {
+    color: #999999;
+    text-shadow: none;
+  }
+}
+
+#header-navbar-inner {
+  background-color: transparent;
+  background-image: none;
+  border: none;
+  padding: none;
+}
+
+#header-navbar-inner li:last-child {
+  border: none;
+}
+
+nav#header-pills {
+  position: absolute;
+  right: 17%;
+  a, p {
+    padding: 2px 10px;
+    margin: 0;
+    line-height: 9px;
+  }
+}
+
+#header-search button {
+  font-size: medium;
+}
+
+//Search
+.input-append .btn.btn-success {border: 0;}
+
+// Tabs Navbar
+#tabs-navbar-inner {
+  background-color: #F7F9F9;
+  background-image: none;
+  margin-left: 20px;
+  margin-top: 10px;
+  width: 95%;
+}
+#tabs-navbar-inner li {
+  background: url("/vivo_admin/assets/separator-main-nav.jpg") no-repeat scroll right -2px transparent;
+  padding: 0 10px;
+}
+
+// Feature
+a.icon-star {
+  color: #B5B5B5;
+  &:hover {
+    color: #F09905;
+    cursor: pointer;
+    text-decoration: none;
+  }
+}
+
+button.btn-link {
+  color: #0736A4;
+  padding: 0;
+  &:hover {
+    color: #CC3300;
+    cursor: pointer;
+  }
+}
+
+.popover-content {line-height: 1.3em;}
+
+#add-keyword {
+  margin-left: 0.5%;
+  a {
+    color: #235F9C;
+    &:hover {
+      color: #0680CD;
+      cursor: pointer;
+      text-decoration: none;
+    }
+  }
+}
+
+// Keywords
+article#person_keywords p {
+  min-height: 0px;
+}
+
+// Weblinks
+#new-webpage input[type="text"] {
+  width: 90%;
+}
+
+// Futures
+.future-status {
+  font-size: small;
+  font-style: italic;
+}
+
+// Footer
+footer {
+  margin-top: 20px;
+}
+
+#footer-nav {
+  margin-top: 15px;
+}
+
+// Delegates
+.agent-netid {line-height: 1.7em;}
+
+.agent-netid > form {display: inline;}
+
+a#add-new-delegate {
+  font-size: large;
+}
+
+a#assign-agent {
+  color: #A1B70D;
+  &:hover {
+    color: #728302;
+  }
+}
+
+#spinner-container {
+  float: left;
+  margin-left: 20px;
+  margin-top: 15px;
+}
+
+#agents-search-results {
+  float: left;
+  margin-bottom: 10px;
+  margin-left: 0;
+  & > ul > li {
+    float: left;
+    width: 50%;
+  }
+}
+
+/* Show / Hide */
+.hide-dropdown {
+  color: #666666;
+  & > .caret {
+  border-top-color: #B5B5B5;
+  margin-top: 8px;
+  }
+}
+
+div.remove-dropdown { 
+  & .dropdown-menu{
+    margin: 2px 0 0 -60px;
+  }
+}
+
+div.addremove_controls {
+  font-size: 0.7em;
+  margin-top: 0.5em;
+}
+
+div.well-small {padding-bottom: 0;}
+
+.short_content {
+  display: block;    /*   more/less feature doesn't work in Chrome without this  */
+}
+
+.all_content {
+  overflow: hidden;  /* Recommended: if not hiding the text before it's shortened. */
+  display: block;    /*    more/less feature doesn't work in Chrome without this  */
+}
+
+.more_ellipses {
+  white-space: nowrap;
+}
+
+.more_link {
+  white-space: nowrap;
+}
+
+// Artistic Works
+.form-horizontal .control-group {
+  margin-bottom: 10px;
+}
+.form-horizontal.small-input .control-label {
+  width: 100px;
+  text-align: left;
+}
+.form-horizontal.small-input .controls {
+  width: 280px;
+  margin-left: 120px;
+}
+
+.form-horizontal.small-input .controls.wide-controls {
+  width: 100%;
+}
+
+.form-horizontal.small-input .control-label.wide-control-label {
+  width: 133px;
+}
+
+.form-horizontal.small-input .control-label.medium-wide-control-label {
+  width: 118px;
+}
+
+.wide-control-group {
+  width: 100%;
+}
+
+.form-horizontal.small-input .controls.medium-wide-controls {
+  width: 325px;
+  margin-left: 75px;
+}
+
+.art-item {
+  border-bottom: 1px solid #BBBBBB;
+  min-height: 27px;
+}
+
+.form-horizontal.small-input .control-label.small-control-label {
+  width: 55px;
+  margin-left: 7px;
+}
+
+.form-horizontal.small-input .control-label.icon-label {
+  padding-top: 0;
+}
+
+.affix {
+  top: 0;
+  width: 100%;
+}
+
+.affix-container {
+  height: 50px;
+}
+
+.wide-text-area {width: 79%;}
+
+.well-very-small {padding: 0;}
+
+/* Media queries */
+
+@media (max-width: 900px) {
+  #header-search {float: left;}
+}
+
+@media (max-width: 570px) {
+  #footer-nav {float: left;}
+}
+
+@media (max-width: 525px) {
+  input {width: 120px;}
+}
+
+@media (max-width: 435px) {
+  input {width: 80px;}
+  .navbar .nav > li > a {
+    padding-left: 7px;
+    padding-right: 7px;
+  }
+}

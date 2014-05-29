@@ -10,3 +10,4 @@ pom.xml
 .lein-failures
 .nrepl-port
 vivo_widgets_reporter.*.js
+.sass-cache
