@@ -12,7 +12,7 @@
   }))
 
 (def base-url
-  "https://scholars-test.oit.duke.edu/widgets/api/v0.9/people/complete/all.jsonp?uri=")
+  "https://scholars.duke.edu/widgets/api/v0.9/people/complete/all.jsonp?uri=")
 
 (defn create-heading [ {:keys [prefixName firstName lastName]} ]
   (str "Scholars Report for " prefixName " " firstName " " lastName)
@@ -79,6 +79,10 @@
   (om/set-state! owner preference (.. e -target -checked))
   )
 
+(defn requested-uri []
+  (string/replace (str (.. js/document -location -search)) #"\?" "")
+  )
+
 (defn body [app owner]
   (reify
     om/IDisplayName
@@ -87,7 +91,7 @@
     om/IInitState
     (init-state [_]
       {
-       :faculty-uri "https://scholars.duke.edu/individual/per2845042"
+       :faculty-uri (requested-uri)
 
        :heading "Scholars Report"
 
