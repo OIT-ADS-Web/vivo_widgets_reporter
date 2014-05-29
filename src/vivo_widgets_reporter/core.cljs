@@ -23,7 +23,7 @@
   )
 
 (defn parse-labels [json]
-  (string/join "\n\n" (map :label json))
+  (string/join "\n" (map :label json))
   )
 
 (defn parse-publications [json]
@@ -83,6 +83,14 @@
   (string/replace (str (.. js/document -location -search)) #"\?uri=" "")
   )
 
+(defn include-checkbox [owner state preference label]
+  (dom/label #js {:className "checkbox"}
+    (dom/input
+      #js {:type "checkbox" :checked (preference state)
+           :onChange #(update-preference % owner preference)}
+      )
+    label))
+
 (defn body [app owner]
   (reify
     om/IDisplayName
@@ -111,27 +119,15 @@
         (dom/h2 nil (:heading state))
         (dom/p nil (:subheading state))
         (dom/form #js {:className "form-inline"}
-          (dom/input
-            #js {:type "checkbox" :checked (:include-overview state)
-                 :onChange #(update-preference % owner :include-overview) }
-            "Overview")
-          (dom/input
-            #js {:type "checkbox" :checked (:include-appointments state)
-                 :onChange #(update-preference % owner :include-appointments) }
-            "Appointments")
-          (dom/input
-            #js {:type "checkbox" :checked (:include-geofoci state)
-                 :onChange #(update-preference % owner :include-geofoci) }
-            "Geographical Focus")
-          (dom/input
-            #js {:type "checkbox" :checked (:include-publications state)
-                 :onChange #(update-preference % owner :include-publications) }
-            "Publications")
-                  )
+          (include-checkbox owner state :include-overview "Overview")
+          (include-checkbox owner state :include-appointments "Appointments")
+          (include-checkbox owner state :include-geofoci "Geographical Focus")
+          (include-checkbox owner state :include-publications "Publications")
+          )
         (dom/div nil
           (dom/textarea
             #js {:value (generate-report state)
-                 :rows 20
+                 :rows 20 :className "span12"
                  })
           )
         )
