@@ -12,8 +12,13 @@
 (def app-state (atom {
   }))
 
-(def base-url
-  "https://scholars-test.oit.duke.edu/widgets/api/v0.9/people/complete/all.jsonp?uri=")
+(def base-url "https://scholars-test.oit.duke.edu/widgets/api/v0.9/people/")
+
+(def base-person-url (str base-url "complete/all.jsonp?uri="))
+
+(def base-publications-url (str base-url "publications/all.jsonp?uri="))
+
+(def base-artistic-works-url (str base-url "artistic_works/all.jsonp?uri="))
 
 (defn create-heading [ {:keys [prefixName firstName lastName]} ]
   (str "Scholars Report for " prefixName " " firstName " " lastName)
@@ -49,8 +54,17 @@
   (om/set-state! owner :geofoci (str "Geographical Focus\n\n" (parse-labels json)))
   )
 
+(defn get-jsonp [url callback]
+  (.send (goog.net.Jsonp. url) "" callback))
+
+
 (defn set-publications [json owner]
   (om/set-state! owner :publications (str "Publications\n\n" (parse-publications json)))
+  )
+
+(defn get-and-set-publications [owner]
+  (get-jsonp (str base-publications-url (om/get-state owner :faculty-uri) "&start=" (om/get-state owner :start) "&end=" (om/get-state owner :end))
+             #(set-publications (js->clj % :keywordize-keys true) owner))
   )
 
 (defn set-art-works [json owner]
@@ -58,6 +72,7 @@
   )
 
 (defn set-fields [json owner]
+  (.log js/console "called set-fields")
   (let [json-in-clojure (js->clj json :keywordize-keys true)]
     (set-overview (:attributes json-in-clojure) owner)
     (set-appointments (:positions json-in-clojure) owner)
@@ -68,9 +83,8 @@
   )
 
 (defn get-fields [owner]
-  (let [url (str base-url (om/get-state owner :faculty-uri))]
-    (.send (goog.net.Jsonp. url) "" #(set-fields % owner))
-    )
+  (get-jsonp (str base-person-url (om/get-state owner :faculty-uri))
+             #(set-fields % owner))
   )
 
 (defn generate-report [{:keys [include-overview overview 
@@ -78,6 +92,7 @@
                                include-publications publications
                                include-art-works art-works
                                include-geofoci geofoci]}]
+  ;(.log js/console publications)
   (str
     (if include-appointments (str appointments "\n\n"))
     (if include-overview     (str overview     "\n\n"))
@@ -91,9 +106,10 @@
   (om/set-state! owner preference (.. e -target -checked)))
 
 (defn update-date-delimiter [e owner delimiter]
-  (.log js/console delimiter)
-  (.log js/console (.. e -target -value))
-  (om/set-state! owner delimiter (.. e -target -value)))
+  (do (om/set-state! owner delimiter (.. e -target -value))
+      (get-and-set-publications owner)
+   )
+  )
 
 (defn requested-uri []
   (string/replace (str (.. js/document -location -search)) #"\?uri=" ""))
@@ -133,8 +149,8 @@
        :include-overview false
        :include-appointments false
        :include-geofoci false
-       :include-publications false
-       :include-art-works true
+       :include-publications true
+       :include-art-works false
        }
       )
     om/IWillMount
