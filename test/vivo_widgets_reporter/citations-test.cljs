@@ -111,3 +111,10 @@
     (is (= (src/art-work-citation data)
            "Professor Music Himself. The Music of Tin Cans. Conductor. Musical Performance. 01/05/2012."
            ))))
+
+(deftest commissioned-art-work
+  (let [data (assoc-in base-art-work
+                       [:attributes :commissioning_body]
+                       "Some Rich Guy")]
+    (is (= (src/art-work-citation data)
+           "Professor Music Himself. The Music of Tin Cans. Conductor. Musical Performance. Commissioned by Some Rich Guy. 2012."))))

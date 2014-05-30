@@ -3,7 +3,7 @@
   )
 
 (defn cite-authors [authorList]
-  (if (string/blank? authorList) "" (str authorList ". "))
+  (if-not (string/blank? authorList) (str authorList ". "))
   )
 
 (defn extract-year [date]
@@ -78,9 +78,11 @@
     )
   )
 
-(defn art-work-citation [{label :label {:keys [collaborators role
-                                               type_description]
+(defn art-work-citation [{label :label {:keys [collaborators type_description
+                                               role commissioning_body]
                                         } :attributes :as json}]
   (str collaborators ". " label ". " role ". " type_description ". "
+       (if-not (string/blank? commissioning_body)
+               (str "Commissioned by " commissioning_body ". "))
        (extract-precise-date json) ".")
   )
