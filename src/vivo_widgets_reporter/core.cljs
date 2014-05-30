@@ -88,12 +88,15 @@
   )
 
 (defn update-preference [e owner preference]
-  (om/set-state! owner preference (.. e -target -checked))
-  )
+  (om/set-state! owner preference (.. e -target -checked)))
+
+(defn update-date-delimiter [e owner delimiter]
+  (.log js/console delimiter)
+  (.log js/console (.. e -target -value))
+  (om/set-state! owner delimiter (.. e -target -value)))
 
 (defn requested-uri []
-  (string/replace (str (.. js/document -location -search)) #"\?uri=" "")
-  )
+  (string/replace (str (.. js/document -location -search)) #"\?uri=" ""))
 
 (defn include-checkbox [owner state preference label]
   (dom/label #js {:className "checkbox"}
@@ -102,6 +105,18 @@
            :onChange #(update-preference % owner preference)}
       )
     label))
+
+(defn date-input [owner state delimiter label]
+  (dom/div #js {:className "control-group"}
+    (dom/label #js {:className "control-label"} label)
+    (dom/div #js {:className "controls"}
+      (dom/input #js {:type "text" :placeholder "YYYY-MM-DD"
+                      :value (delimiter state)
+                      :onChange #(update-date-delimiter % owner delimiter)
+                      })
+      )
+    )
+  )
 
 (defn body [app owner]
   (reify
@@ -129,7 +144,12 @@
     om/IRenderState
     (render-state [this state]
       (dom/div nil
-        (dom/h2 nil (:heading state))
+        (dom/h2 nil (:heading state) 
+          (if-not (string/blank? (:start state))
+                  (dom/span nil (str ", from " (:start state)) ))
+          (if-not (string/blank? (:end state))
+                  (dom/span nil (str ", until " (:end state)) ))
+          )
         (dom/p nil (:subheading state))
         (dom/form #js {:className "form-inline"}
           (include-checkbox owner state :include-overview "Overview")
@@ -137,6 +157,10 @@
           (include-checkbox owner state :include-geofoci "Geographical Focus")
           (include-checkbox owner state :include-publications "Publications")
           (include-checkbox owner state :include-art-works "Artistic Works")
+          )
+        (dom/form #js {:className "form-horizontal"}
+          (date-input owner state :start "Start Date")
+          (date-input owner state :end "End Date")
           )
         (dom/div nil
           (dom/textarea
