@@ -36,7 +36,10 @@
         )))
 
 (deftest journal-with-published-by
-  (let [data (assoc-in (dissoc-in base-journal [:attributes :publishedIn]) [:attributes :publishedBy] "Another Publisher")]
+  (let [data (-> base-journal
+                 (dissoc-in [:attributes :publishedIn])
+                 (assoc-in  [:attributes :publishedBy] "Another Publisher")
+                 )]
     (is (= (src/pub-citation data)
         "Doe, J. The Article Title. Another Publisher (2013): 259-277."))))
 
@@ -47,8 +50,9 @@
         )))
 
 (deftest journal-citation-with-issue
-  (let [data (assoc-in (assoc-in base-journal [:attributes :volume] "1")
-                       [:attributes :issue] "20")]
+  (let [data (-> base-journal
+                 (assoc-in [:attributes :volume] "1")
+                 (assoc-in [:attributes :issue] "20"))]
     (is (= (src/pub-citation data)
            "Doe, J. The Article Title. The Journal 1, no. 20 (2013): 259-277.")
         )))
