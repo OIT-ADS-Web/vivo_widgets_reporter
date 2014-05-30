@@ -6,8 +6,30 @@
   (if (string/blank? authorList) "" (str authorList ". "))
   )
 
-(defn extract-year [year]
-  (string/join (take 4 year))
+(defn extract-year [date]
+  (string/join (take 4 date)))
+
+(defn extract-month [date year]
+  (string/join (take 2 (string/replace date
+                                       (re-pattern (str year "-"))
+                                       ""))))
+
+(defn extract-day [date month year]
+  (string/join (take 2 (string/replace date
+                                       (re-pattern (str year "-" month "-"))
+                                       ""))))
+
+(defn extract-month-year [date]
+  (let [year (extract-year date)
+        month (extract-month date year)]
+    (str month "/" year)))
+
+(defn extract-month-day-year [date]
+  (let [year (extract-year date)
+        month (extract-month date year)
+        day (extract-day date month year)]
+    (str month "/" day "/" year)
+    )
   )
 
 (defn journal-citation [{label :label {:keys [authorList
@@ -47,3 +69,18 @@
     )
   )
 
+(defn extract-precise-date [{{:keys [date date_precision]} :attributes}]
+  (cond
+    (re-matches #".*yearPrecision" date_precision)         (extract-year date)
+    (re-matches #".*yearMonthPrecision" date_precision)    (extract-month-year date)
+    (re-matches #".*yearMonthDayPrecision" date_precision) (extract-month-day-year date)
+    :else (extract-year date)
+    )
+  )
+
+(defn art-work-citation [{label :label {:keys [collaborators role
+                                               type_description]
+                                        } :attributes :as json}]
+  (str collaborators ". " label ". " role ". " type_description ". "
+       (extract-precise-date json) ".")
+  )

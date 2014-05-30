@@ -3,7 +3,8 @@
             [om.dom :as dom :include-macros true]
             [clojure.string :as string]
             [goog.net.Jsonp]
-            [vivo_widgets_reporter.citations :refer [pub-citation]]
+            [vivo_widgets_reporter.citations :refer [pub-citation
+                                                     art-work-citation]]
             ))
 
 (enable-console-print!)
@@ -12,7 +13,7 @@
   }))
 
 (def base-url
-  "https://scholars.duke.edu/widgets/api/v0.9/people/complete/all.jsonp?uri=")
+  "https://scholars-test.oit.duke.edu/widgets/api/v0.9/people/complete/all.jsonp?uri=")
 
 (defn create-heading [ {:keys [prefixName firstName lastName]} ]
   (str "Scholars Report for " prefixName " " firstName " " lastName)
@@ -28,6 +29,10 @@
 
 (defn parse-publications [json]
   (string/join "\n\n" (map #(pub-citation %) json))
+  )
+
+(defn parse-art-works [json]
+  (string/join "\n\n" (map #(art-work-citation %) json))
   )
 
 (defn set-appointments [json owner]
@@ -49,7 +54,7 @@
   )
 
 (defn set-art-works [json owner]
-  (om/set-state! owner :art-works (str "Artistic Works\n\n" json))
+  (om/set-state! owner :art-works (str "Artistic Works\n\n" (parse-art-works json)))
   )
 
 (defn set-fields [json owner]
