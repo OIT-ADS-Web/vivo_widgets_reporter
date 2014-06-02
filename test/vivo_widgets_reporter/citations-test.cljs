@@ -69,6 +69,11 @@
     (is (= (src/pub-citation data)
            "Doe, J. The Article Title. The Journal (2013)."))))
 
+(deftest title-with-period
+  (let [data (assoc base-journal :label "The Article Title.")]
+    (is (= (src/pub-citation data)
+        "Doe, J. The Article Title. The Journal (2013): 259-277."))))
+
 (def base-book {:vivoType "http://purl.org/ontology/bibo/Book",
                 :label "The Book Title",
                 :attributes {:year "2007-01-01T00:00:00",
@@ -93,6 +98,19 @@
   (let [data (assoc-in base-book [:attributes :authorList] "")]
     (is (= (src/pub-citation data)
            "The Book Title. 2007."))))
+
+(deftest book-section
+  (let [data {:vivoType "http://purl.org/ontology/bibo/BookSection"
+              :label "Some Book Section"
+              :attributes {:startPage "3"
+                           :endPage "11"
+                           :year "2011-03-16T00:00:00"
+                           :authorList "Handy, J"
+                           :publishedBy "Oxford University Press"}}]
+    (is (= (src/pub-citation data)
+           "Handy, J. \"Some Book Section.\" 3-11. Oxford University Press, 2011."))
+    )
+  )
 
 (def base-art-work {:vivoType "http://vivo.duke.edu/vivo/ontology/duke-art-extension#MusicalPerformance"
                     :label "The Music of Tin Cans"

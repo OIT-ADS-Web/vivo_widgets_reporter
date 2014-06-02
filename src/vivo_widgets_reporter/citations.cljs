@@ -32,6 +32,19 @@
     )
   )
 
+(defn title [label & {:keys [surround]}]
+  (str
+    surround
+    (if (re-matches #".*\." label) label (str label "."))
+    surround
+    " "
+    )
+  )
+
+(defn page-numbers [start end & {:keys [prefix suffix]}]
+  (if (or start end) (str prefix start "-" end suffix))
+  )
+
 (defn journal-citation [{label :label {:keys [authorList
                                               publishedIn
                                               publishedBy
@@ -41,21 +54,34 @@
                                               startPage
                                               endPage]} :attributes}]
   (str (cite-authors authorList)
-       label ". "
+       (title label)
        (if publishedIn (str publishedIn " ")
          (if publishedBy (str publishedBy " ")))
        volume
        (if issue (str ", no. " issue))
        (if (or volume issue) " ")
        "(" (extract-year year) ")"
-       (if (or startPage endPage) (str ": " startPage "-" endPage))
+       (page-numbers startPage endPage :prefix ": ")
        "."
        )
   )
 
 (defn book-citation [{label :label {:keys [authorList year publishedBy]} :attributes}]
   (str (cite-authors authorList)
-       label ". "
+       (title label)
+       (if publishedBy (str publishedBy ", "))
+       (extract-year year) "."
+       )
+  )
+
+(defn section-citation [{label :label {:keys [authorList
+                                              year
+                                              startPage
+                                              endPage
+                                              publishedBy]} :attributes}]
+  (str (cite-authors authorList)
+       (title label :surround "\"")
+       (page-numbers startPage endPage :suffix ". ")
        (if publishedBy (str publishedBy ", "))
        (extract-year year) "."
        )
@@ -64,8 +90,9 @@
 (defn pub-citation [{:keys [vivoType] :as json}]
   (cond
     (re-matches #".*AcademicArticle" vivoType) (journal-citation json)
-    (re-matches #".*OtherArticle" vivoType) (journal-citation json)
-    (re-matches #".*Book" vivoType) (book-citation json)
+    (re-matches #".*OtherArticle" vivoType)    (journal-citation json)
+    (re-matches #".*Book" vivoType)            (book-citation json)
+    (re-matches #".*BookSection" vivoType)     (section-citation json)
     :else (str "Cannot handle type: " vivoType ", with: " json)
     )
   )
