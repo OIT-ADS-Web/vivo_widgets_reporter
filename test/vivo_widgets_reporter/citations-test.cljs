@@ -35,6 +35,11 @@
         "Doe, J. The Article Title. The Journal (2013): 259-277.")
         )))
 
+(deftest other-article-behaves-like journal
+  (let [data (assoc base-journal :vivoType "http://purl.org/ontology/bibo/OtherArticle")]
+    (is (= (src/pub-citation data)
+        "Doe, J. The Article Title. The Journal (2013): 259-277."))))
+
 (deftest journal-with-published-by
   (let [data (-> base-journal
                  (dissoc-in [:attributes :publishedIn])
@@ -56,6 +61,13 @@
     (is (= (src/pub-citation data)
            "Doe, J. The Article Title. The Journal 1, no. 20 (2013): 259-277.")
         )))
+
+(deftest journal-without-pages
+  (let [data (-> base-journal
+                 (dissoc-in [:attributes :startPage])
+                 (dissoc-in [:attributes :endPage]))]
+    (is (= (src/pub-citation data)
+           "Doe, J. The Article Title. The Journal (2013)."))))
 
 (def base-book {:vivoType "http://purl.org/ontology/bibo/Book",
                 :label "The Book Title",

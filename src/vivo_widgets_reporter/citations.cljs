@@ -47,8 +47,8 @@
        volume
        (if issue (str ", no. " issue))
        (if (or volume issue) " ")
-       "(" (extract-year year) "): "
-       startPage "-" endPage 
+       "(" (extract-year year) ")"
+       (if (or startPage endPage) (str ": " startPage "-" endPage))
        "."
        )
   )
@@ -64,8 +64,9 @@
 (defn pub-citation [{:keys [vivoType] :as json}]
   (cond
     (re-matches #".*AcademicArticle" vivoType) (journal-citation json)
+    (re-matches #".*OtherArticle" vivoType) (journal-citation json)
     (re-matches #".*Book" vivoType) (book-citation json)
-    :else (str "Cannot handle type: " vivoType)
+    :else (str "Cannot handle type: " vivoType ", with: " json)
     )
   )
 
