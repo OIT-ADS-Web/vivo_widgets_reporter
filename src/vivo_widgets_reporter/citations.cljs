@@ -78,9 +78,11 @@
                                               year
                                               startPage
                                               endPage
+                                              parentBookTitle
                                               publishedBy]} :attributes}]
   (str (cite-authors authorList)
        (title label :surround "\"")
+       (if parentBookTitle (title parentBookTitle))
        (page-numbers startPage endPage :suffix ". ")
        (if publishedBy (str publishedBy ", "))
        (extract-year year) "."
@@ -91,9 +93,16 @@
   (cond
     (re-matches #".*AcademicArticle" vivoType) (journal-citation json)
     (re-matches #".*OtherArticle" vivoType)    (journal-citation json)
+    (re-matches #".*ConferencePaper" vivoType) (journal-citation json)
+    (re-matches #".*Dataset" vivoType)         (journal-citation json)
+    (re-matches #".*Software" vivoType)        (journal-citation json)
+    (re-matches #".*DigitalPublication" vivoType) (journal-citation json)
+    ;Matches "EditedBook" too
     (re-matches #".*Book" vivoType)            (book-citation json)
+    (re-matches #".*Report" vivoType)          (book-citation json)
+    (re-matches #".*Thesis" vivoType)          (book-citation json)
     (re-matches #".*BookSection" vivoType)     (section-citation json)
-    :else (str "Cannot handle type: " vivoType ", with: " json)
+    :else (journal-citation json)
     )
   )
 
