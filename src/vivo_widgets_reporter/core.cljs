@@ -2,88 +2,13 @@
   (:require [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]
             [clojure.string :as string]
-            [goog.net.Jsonp]
+            [vivo_widgets_reporter.widgets :as widgets]
             [vivo_widgets_reporter.select :as select]
-            [vivo_widgets_reporter.citations :refer [pub-citation
-                                                     art-work-citation]]
             ))
 
 (enable-console-print!)
 
 (def app-state (atom {}))
-
-(def base-url "https://scholars-test.oit.duke.edu/widgets/api/v0.9/people/")
-
-(def base-person-url (str base-url "complete/all.jsonp?uri="))
-
-(def base-publications-url (str base-url "publications/all.jsonp?uri="))
-
-(def base-art-works-url (str base-url "artistic_works/all.jsonp?uri="))
-
-(defn create-heading [ {:keys [prefixName firstName lastName]} ]
-  (str "Scholars Report for " prefixName " " firstName " " lastName)
-  )
-
-(defn create-subheading [{:keys [preferredTitle]}]
-  (str preferredTitle)
-  )
-
-(defn set-appointments [json owner]
-  (om/set-state! owner :appointments (map :label json))
-  )
-
-(defn set-overview [json owner]
-  (om/set-state! owner :overview (:overview json))
-  (om/set-state! owner :heading (create-heading json))
-  (om/set-state! owner :subheading (create-subheading json))
-  )
-
-(defn set-geofoci [json owner]
-  (om/set-state! owner :geofoci (map :label json))
-  )
-
-(defn get-jsonp [url callback]
-  (.send (goog.net.Jsonp. url) "" callback))
-
-(defn params [owner]
-  (str (om/get-state owner :faculty-uri)
-       "&start=" (om/get-state owner :start)
-       "&end=" (om/get-state owner :end)))
-
-(defn set-publications [json owner]
-  (om/set-state! owner :publications (map #(pub-citation %) json))
-  )
-
-(defn set-art-works [json owner]
-  (om/set-state! owner :art-works (map #(art-work-citation %) json))
-  )
-
-(defn get-and-set [owner url callback]
-  (get-jsonp (str url (params owner))
-             #(callback (js->clj % :keywordize-keys true) owner))
-  )
-
-(defn get-and-set-dated-fields [owner]
-  (do
-    (get-and-set owner base-publications-url set-publications)
-    (get-and-set owner base-art-works-url set-art-works)
-    )
-  )
-
-(defn set-fields [json owner]
-  (let [json-in-clojure (js->clj json :keywordize-keys true)]
-    (set-overview (:attributes json-in-clojure) owner)
-    (set-appointments (:positions json-in-clojure) owner)
-    (set-geofoci (:geographicalFocus json-in-clojure) owner)
-    (set-publications (:publications json-in-clojure) owner)
-    (set-art-works (:artisticWorks json-in-clojure) owner)
-    )
-  )
-
-(defn get-fields [owner]
-  (get-jsonp (str base-person-url (om/get-state owner :faculty-uri))
-             #(set-fields % owner))
-  )
 
 (defn report-section [title content]
   (dom/div nil 
@@ -118,10 +43,17 @@
 (defn update-preference [e owner preference]
   (om/set-state! owner preference (.. e -target -checked)))
 
+(defn is-a-valid-date [string]
+  (re-matches #"\d{4}-(?:0|1)\d-(?:0|1)\d" string)
+  )
+
 (defn update-date-delimiter [e owner delimiter]
-  (do (om/set-state! owner delimiter (.. e -target -value))
-      (get-and-set-dated-fields owner)
-   )
+  (let [new-value (.. e -target -value)]
+    (if (is-a-valid-date new-value)
+      (do (om/set-state! owner delimiter new-value)
+          (widgets/get-and-set-dated-fields owner)
+          )
+      ))
   )
 
 (defn requested-uri []
@@ -168,7 +100,7 @@
       )
     om/IWillMount
     (will-mount [this]
-      (get-fields owner)
+      (widgets/get-fields owner)
       )
     om/IRenderState
     (render-state [this state]
