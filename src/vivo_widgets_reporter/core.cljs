@@ -3,6 +3,7 @@
             [om.dom :as dom :include-macros true]
             [clojure.string :as string]
             [goog.net.Jsonp]
+            [vivo_widgets_reporter.select :as select]
             [vivo_widgets_reporter.citations :refer [pub-citation
                                                      art-work-citation]]
             ))
@@ -97,20 +98,20 @@
 
 (defn list-section [title items]
   (report-section title
-                  (apply dom/ul nil
+                  (apply dom/ul #js {:className "unstyled"}
                          (map (fn [item] (dom/li nil item)) items))))
 
 (defn generate-report [{:keys [include-overview overview 
                                include-appointments appointments
-                               include-publications publications
                                include-art-works art-works
+                               include-publications publications
                                include-geofoci geofoci]}]
   (dom/div nil
     (if include-appointments (list-section "Appointments" appointments))
     (if include-overview     (dangerous-html-section "Overview" overview))
     (if include-geofoci      (list-section "Geographical Focus" geofoci))
-    (if include-publications (list-section "Publications" publications))
     (if include-art-works    (list-section "Artistic Works" art-works))
+    (if include-publications (list-section "Publications" publications))
    )
   )
 
@@ -183,14 +184,15 @@
           (include-checkbox owner state :include-overview "Overview")
           (include-checkbox owner state :include-appointments "Appointments")
           (include-checkbox owner state :include-geofoci "Geographical Focus")
-          (include-checkbox owner state :include-publications "Publications")
           (include-checkbox owner state :include-art-works "Artistic Works")
+          (include-checkbox owner state :include-publications "Publications")
           )
         (dom/form #js {:className "form-horizontal"}
           (date-input owner state :start "Start Date")
           (date-input owner state :end "End Date")
           )
-        (dom/div #js {:className "well"}
+        (select/buttons "report")
+        (dom/div #js {:id "report" :className "well"}
           (generate-report state)
           )
         )
