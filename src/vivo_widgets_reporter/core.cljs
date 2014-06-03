@@ -9,8 +9,7 @@
 
 (enable-console-print!)
 
-(def app-state (atom {
-  }))
+(def app-state (atom {}))
 
 (def base-url "https://scholars-test.oit.duke.edu/widgets/api/v0.9/people/")
 
@@ -28,30 +27,18 @@
   (str preferredTitle)
   )
 
-(defn parse-labels [json]
-  (string/join "\n" (map :label json))
-  )
-
-(defn parse-publications [json]
-  (string/join "\n\n" (map #(pub-citation %) json))
-  )
-
-(defn parse-art-works [json]
-  (string/join "\n\n" (map #(art-work-citation %) json))
-  )
-
 (defn set-appointments [json owner]
-  (om/set-state! owner :appointments (str "Appointments\n\n" (parse-labels json)))
+  (om/set-state! owner :appointments (map :label json))
   )
 
 (defn set-overview [json owner]
-  (om/set-state! owner :overview (str "Overview\n\n" (:overview json)))
+  (om/set-state! owner :overview (:overview json))
   (om/set-state! owner :heading (create-heading json))
   (om/set-state! owner :subheading (create-subheading json))
   )
 
 (defn set-geofoci [json owner]
-  (om/set-state! owner :geofoci (str "Geographical Focus\n\n" (parse-labels json)))
+  (om/set-state! owner :geofoci (map :label json))
   )
 
 (defn get-jsonp [url callback]
@@ -63,11 +50,11 @@
        "&end=" (om/get-state owner :end)))
 
 (defn set-publications [json owner]
-  (om/set-state! owner :publications (str "Publications\n\n" (parse-publications json)))
+  (om/set-state! owner :publications (map #(pub-citation %) json))
   )
 
 (defn set-art-works [json owner]
-  (om/set-state! owner :art-works (str "Artistic Works\n\n" (parse-art-works json)))
+  (om/set-state! owner :art-works (map #(art-work-citation %) json))
   )
 
 (defn get-and-set [owner url callback]
@@ -97,17 +84,28 @@
              #(set-fields % owner))
   )
 
+(defn item-section [title item]
+  (dom/div nil 
+    (dom/h3 nil title)
+    (dom/p nil item)))
+
+(defn list-section [title items]
+  (dom/div nil 
+    (dom/h3 nil title)
+    (apply dom/ul nil
+       (map (fn [item] (dom/li nil item)) items))))
+
 (defn generate-report [{:keys [include-overview overview 
                                include-appointments appointments
                                include-publications publications
                                include-art-works art-works
                                include-geofoci geofoci]}]
-  (str
-    (if include-appointments (str appointments "\n\n"))
-    (if include-overview     (str overview     "\n\n"))
-    (if include-geofoci      (str geofoci      "\n\n"))
-    (if include-publications (str publications "\n\n"))
-    (if include-art-works    (str art-works    "\n\n"))
+  (dom/div nil
+    (if include-appointments (list-section "Appointments" appointments))
+    (if include-overview     (item-section "Overview" overview))
+    (if include-geofoci      (list-section "Geographical Focus" geofoci))
+    (if include-publications (list-section "Publications" publications))
+    (if include-art-works    (list-section "Artistic Works" art-works))
    )
   )
 
@@ -155,11 +153,11 @@
 
        :heading "Scholars Report"
 
-       :include-overview false
-       :include-appointments false
-       :include-geofoci false
+       :include-overview true
+       :include-appointments true
+       :include-geofoci true
        :include-publications true
-       :include-art-works false
+       :include-art-works true
        }
       )
     om/IWillMount
@@ -187,11 +185,8 @@
           (date-input owner state :start "Start Date")
           (date-input owner state :end "End Date")
           )
-        (dom/div nil
-          (dom/textarea
-            #js {:value (generate-report state)
-                 :rows 20 :className "span12"
-                 })
+        (dom/div #js {:className "well"}
+          (generate-report state)
           )
         )
       )
