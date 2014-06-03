@@ -84,16 +84,21 @@
              #(set-fields % owner))
   )
 
-(defn item-section [title item]
+(defn report-section [title content]
   (dom/div nil 
     (dom/h3 nil title)
-    (dom/p nil item)))
+    content
+    ))
+
+(defn dangerous-html-section [title item]
+  (report-section title
+                  (dom/div (clj->js {:dangerouslySetInnerHTML {:__html item}}))
+                  ))
 
 (defn list-section [title items]
-  (dom/div nil 
-    (dom/h3 nil title)
-    (apply dom/ul nil
-       (map (fn [item] (dom/li nil item)) items))))
+  (report-section title
+                  (apply dom/ul nil
+                         (map (fn [item] (dom/li nil item)) items))))
 
 (defn generate-report [{:keys [include-overview overview 
                                include-appointments appointments
@@ -102,7 +107,7 @@
                                include-geofoci geofoci]}]
   (dom/div nil
     (if include-appointments (list-section "Appointments" appointments))
-    (if include-overview     (item-section "Overview" overview))
+    (if include-overview     (dangerous-html-section "Overview" overview))
     (if include-geofoci      (list-section "Geographical Focus" geofoci))
     (if include-publications (list-section "Publications" publications))
     (if include-art-works    (list-section "Artistic Works" art-works))
