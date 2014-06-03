@@ -258,6 +258,10 @@ div.well-small {
   padding-right: 10px;
 }
 
+#report li {
+  padding-bottom: 8px;
+}
+
 .form-horizontal .control-group {
   margin-bottom: 10px; }
 
