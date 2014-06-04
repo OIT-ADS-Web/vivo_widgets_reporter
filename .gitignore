@@ -11,3 +11,4 @@ pom.xml
 .nrepl-port
 vivo_widgets_reporter.*.js
 .sass-cache
+.DS_Store

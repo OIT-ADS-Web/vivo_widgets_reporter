@@ -49,7 +49,7 @@
 
 (defn update-date-delimiter [e owner delimiter]
   (let [new-value (.. e -target -value)]
-    (if (is-a-valid-date new-value)
+    (if (or (is-a-valid-date new-value) (string/blank? new-value))
       (do (om/set-state! owner delimiter new-value)
           (widgets/get-and-set-dated-fields owner)
           )
@@ -72,6 +72,8 @@
     (dom/label #js {:className "control-label"} label)
     (dom/div #js {:className "controls"}
       (dom/input #js {:type "text" :placeholder "YYYY-MM-DD"
+                      :className "datepicker"
+                      :id (name delimiter) 
                       :value (delimiter state)
                       :onChange #(update-date-delimiter % owner delimiter)
                       })
@@ -101,6 +103,19 @@
     om/IWillMount
     (will-mount [this]
       (widgets/get-fields owner)
+      )
+    om/IDidMount
+    (did-mount [this]
+      (.. (js/$ ".datepicker")
+          (datepicker #js {:autoclose true
+                           :startView "decade"
+                           :clearBtn true
+                           :format "yyyy-mm-dd"})
+          (on "changeDate" #(update-date-delimiter % owner
+                                                   (keyword (.. % -target -id))))
+          (on "clearDate" #(update-date-delimiter % owner
+                                                   (keyword (.. % -target -id))))
+          )
       )
     om/IRenderState
     (render-state [this state]
