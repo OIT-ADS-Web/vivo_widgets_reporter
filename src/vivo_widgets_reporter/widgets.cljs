@@ -1,8 +1,6 @@
 (ns vivo_widgets_reporter.widgets
   (:require [om.core :as om :include-macros true]
             [goog.net.Jsonp]
-            [vivo_widgets_reporter.citations :refer [pub-citation
-                                                     art-work-citation]]
             )
   )
 
@@ -34,29 +32,12 @@
   (om/set-state! owner :subheading (create-subheading json))
   )
 
-(defn set-appointments [json owner]
-  (om/set-state! owner :appointments (map :label json))
-  )
-
-(defn set-geofoci [json owner]
-  (om/set-state! owner :geofoci (map :label json))
-  )
-
-(defn set-publications [json owner]
-  (om/set-state! owner :publications (map #(pub-citation %) json))
-  )
-
-(defn set-art-works [json owner]
-  (om/set-state! owner :art-works (map #(art-work-citation %) json))
-  )
-
 (defn set-fields [json owner]
   (let [json-in-clojure (js->clj json :keywordize-keys true)]
+    (dorun (map #(om/set-state! owner % (% json-in-clojure))
+                [:positions :geographicalFocus :publications :artisticWorks])
+           )
     (set-overview (:attributes json-in-clojure) owner)
-    (set-appointments (:positions json-in-clojure) owner)
-    (set-geofoci (:geographicalFocus json-in-clojure) owner)
-    (set-publications (:publications json-in-clojure) owner)
-    (set-art-works (:artisticWorks json-in-clojure) owner)
     )
   )
 
@@ -68,14 +49,14 @@
              #(set-fields % owner))
   )
 
-(defn get-and-set [owner url callback]
+(defn get-and-set [owner url field]
   (get-jsonp (str url (params owner))
-             #(callback (js->clj % :keywordize-keys true) owner))
+             #(om/set-state! owner field (js->clj % :keywordize-keys true)))
   )
 
 (defn get-and-set-dated-fields [owner]
   (do
-    (get-and-set owner base-publications-url set-publications)
-    (get-and-set owner base-art-works-url set-art-works)
+    (get-and-set owner base-publications-url :publications)
+    (get-and-set owner base-art-works-url :artisticWorks)
     )
   )

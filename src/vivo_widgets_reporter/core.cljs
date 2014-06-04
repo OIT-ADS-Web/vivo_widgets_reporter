@@ -4,6 +4,8 @@
             [clojure.string :as string]
             [vivo_widgets_reporter.widgets :as widgets]
             [vivo_widgets_reporter.select :as select]
+            [vivo_widgets_reporter.citations :refer [pub-citation
+                                                     art-work-citation]]
             ))
 
 (enable-console-print!)
@@ -27,16 +29,16 @@
                          (map (fn [item] (dom/li nil item)) items))))
 
 (defn generate-report [{:keys [include-overview overview 
-                               include-appointments appointments
-                               include-art-works art-works
-                               include-publications publications
-                               include-geofoci geofoci]}]
+                               include-positions positions
+                               include-art-works artisticWorks
+                               include-publications publications 
+                               include-geofoci geographicalFocus]}]
   (dom/div nil
-    (if include-appointments (list-section "Appointments" appointments))
+    (if include-positions    (list-section "Appointments" (map :label positions)))
     (if include-overview     (dangerous-html-section "Overview" overview))
-    (if include-geofoci      (list-section "Geographical Focus" geofoci))
-    (if include-art-works    (list-section "Artistic Works" art-works))
-    (if include-publications (list-section "Publications" publications))
+    (if include-geofoci      (list-section "Geographical Focus" (map :label geographicalFocus)))
+    (if include-art-works    (list-section "Artistic Works" (map #(art-work-citation %) artisticWorks)))
+    (if include-publications (list-section "Publications" (map #(pub-citation %) publications)))
    )
   )
 
@@ -94,7 +96,7 @@
        :heading "Scholars Report"
 
        :include-overview true
-       :include-appointments true
+       :include-positions true
        :include-geofoci true
        :include-publications true
        :include-art-works true
@@ -129,7 +131,7 @@
         (dom/p nil (:subheading state))
         (dom/form #js {:className "form-inline"}
           (include-checkbox owner state :include-overview "Overview")
-          (include-checkbox owner state :include-appointments "Appointments")
+          (include-checkbox owner state :include-positions "Appointments")
           (include-checkbox owner state :include-geofoci "Geographical Focus")
           (include-checkbox owner state :include-art-works "Artistic Works")
           (include-checkbox owner state :include-publications "Publications")

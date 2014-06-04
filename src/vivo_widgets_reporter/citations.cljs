@@ -1,5 +1,7 @@
 (ns vivo_widgets_reporter.citations
-  (:require [clojure.string :as string])
+  (:require [clojure.string :as string]
+            [om.dom :as dom :include-macros true]
+            )
   )
 
 (defn cite-authors [authorList]
@@ -53,10 +55,10 @@
                                               year
                                               startPage
                                               endPage]} :attributes}]
-  (str (cite-authors authorList)
+  (dom/span nil (cite-authors authorList)
        (title label)
-       (if publishedIn (str publishedIn " ")
-         (if publishedBy (str publishedBy " ")))
+       (if publishedIn (dom/em nil publishedIn " ")
+         (if publishedBy (dom/em nil publishedBy " ")))
        volume
        (if issue (str ", no. " issue))
        (if (or volume issue) " ")
@@ -67,8 +69,8 @@
   )
 
 (defn book-citation [{label :label {:keys [authorList year publishedBy]} :attributes}]
-  (str (cite-authors authorList)
-       (title label)
+  (dom/span nil (cite-authors authorList)
+       (dom/em (title label))
        (if publishedBy (str publishedBy ", "))
        (extract-year year) "."
        )
@@ -80,9 +82,9 @@
                                               endPage
                                               parentBookTitle
                                               publishedBy]} :attributes}]
-  (str (cite-authors authorList)
+  (dom/span nil (cite-authors authorList)
        (title label :surround "\"")
-       (if parentBookTitle (title parentBookTitle))
+       (if parentBookTitle (dom/em nil (title parentBookTitle)))
        (page-numbers startPage endPage :suffix ". ")
        (if publishedBy (str publishedBy ", "))
        (extract-year year) "."
