@@ -41,7 +41,8 @@
                 :optimizations :advanced
                 :pretty-print false
                 :preamble ["react/react.min.js"]
-                :externs ["react/externs/react.js"]
+                :externs ["react/externs/react.js" "externs/jquery-1.9.js"
+                          "externs/bootstrap-datepicker.js"]
                }}
              ]
 

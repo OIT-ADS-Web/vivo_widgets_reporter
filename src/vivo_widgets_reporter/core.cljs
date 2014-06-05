@@ -114,7 +114,7 @@
       )
     om/IDidMount
     (did-mount [this]
-      (.. (js/$ ".datepicker")
+      (.. (js/jQuery ".datepicker")
           (datepicker #js {:autoclose true
                            :startView "decade"
                            :clearBtn true
