@@ -300,6 +300,15 @@ div.well-small {
 .form-horizontal.small-input .control-label.icon-label {
   padding-top: 0; }
 
+/*Override for reporter*/
+.form-horizontal .control-label {
+  width: 70px;
+}
+
+.form-horizontal .controls {
+  margin-left: 90px;
+}
+
 .affix {
   top: 0;
   width: 100%; }
