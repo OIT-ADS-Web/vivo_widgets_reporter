@@ -35,7 +35,8 @@
 (defn set-fields [json owner]
   (let [json-in-clojure (js->clj json :keywordize-keys true)]
     (dorun (map #(om/set-state! owner % (% json-in-clojure))
-                [:positions :geographicalFocus :publications :artisticWorks])
+                [:positions :geographicalFocus :courses :publications
+                 :artisticWorks])
            )
     (set-overview (:attributes json-in-clojure) owner)
     )
