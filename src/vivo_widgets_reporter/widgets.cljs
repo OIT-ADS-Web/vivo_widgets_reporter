@@ -17,7 +17,6 @@
        "&start=" (om/get-state owner :start)
        "&end=" (om/get-state owner :end)))
 
-
 (defn create-heading [ {:keys [prefixName firstName lastName]} ]
   (str "Scholars Report for " prefixName " " firstName " " lastName)
   )
@@ -35,7 +34,7 @@
 (defn set-fields [json owner]
   (let [json-in-clojure (js->clj json :keywordize-keys true)]
     (dorun (map #(om/set-state! owner % (% json-in-clojure))
-                [:positions :geographicalFocus :courses :publications
+                [:positions :geographicalFocus :courses :grants :publications
                  :artisticWorks])
            )
     (set-overview (:attributes json-in-clojure) owner)

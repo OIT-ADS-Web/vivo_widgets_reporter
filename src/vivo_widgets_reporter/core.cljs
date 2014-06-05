@@ -31,6 +31,7 @@
 (defn generate-report [{:keys [include-overview overview 
                                include-positions positions
                                include-courses courses
+                               include-grants grants
                                include-art-works artisticWorks
                                include-publications publications 
                                include-geofoci geographicalFocus]}]
@@ -39,6 +40,7 @@
     (if include-overview     (dangerous-html-section "Overview" overview))
     (if include-geofoci      (list-section "Geographical Focus" (map :label geographicalFocus)))
     (if include-courses      (list-section "Courses" (map :label courses)))
+    (if include-grants      (list-section "Grants" (map :label grants)))
     (if include-art-works    (list-section "Artistic Works" (map #(art-work-citation %) artisticWorks)))
     (if include-publications (list-section "Publications" (map #(pub-citation %) publications)))
    )
@@ -103,6 +105,7 @@
        :include-publications true
        :include-art-works true
        :include-courses true
+       :include-grants true
        }
       )
     om/IWillMount
@@ -137,6 +140,7 @@
           (include-checkbox owner state :include-positions "Appointments")
           (include-checkbox owner state :include-geofoci "Geographical Focus")
           (include-checkbox owner state :include-courses "Courses")
+          (include-checkbox owner state :include-grants "Grants")
           (include-checkbox owner state :include-art-works "Artistic Works")
           (include-checkbox owner state :include-publications "Publications")
           )
