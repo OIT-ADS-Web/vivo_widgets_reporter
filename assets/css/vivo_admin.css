@@ -7,7 +7,7 @@ html, body, input, button {
   font-family: "Lucida Sans Unicode","Lucida Grande",Geneva,helvetica,sans-serif; }
 
 body {
-  background: url("https://scholars.duke.edu/vivo_admin/assets/header-background.png") no-repeat scroll center 0; }
+  background: url("/vivo_admin/assets/header-background.png") no-repeat scroll center 0; }
 
 section {
   padding: 0 10px; }
