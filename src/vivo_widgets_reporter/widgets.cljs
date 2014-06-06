@@ -5,9 +5,10 @@
             )
   )
 
+;Defaults to scholars-test for local work in a file
 (def domain
   (let [doc-domain (.. js/document -domain)]
-    (if-not (string/blank? doc-domain) doc-domain "scholars-dev.oit.duke.edu")
+    (if-not (string/blank? doc-domain) doc-domain "scholars-test.oit.duke.edu")
     )
   )
 
@@ -49,7 +50,11 @@
   )
 
 (defn get-jsonp [url callback]
-  (.send (goog.net.Jsonp. url) "" callback))
+  (let [jsonp (goog.net.Jsonp. url)]
+    (do (.setRequestTimeout jsonp 20000))
+    (.send jsonp "" callback)
+    )
+  )
 
 (defn get-fields [owner]
   (get-jsonp (str base-person-url (om/get-state owner :faculty-uri))
