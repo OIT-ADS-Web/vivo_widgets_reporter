@@ -1,10 +1,17 @@
 (ns vivo_widgets_reporter.widgets
   (:require [om.core :as om :include-macros true]
+            [clojure.string :as string]
             [goog.net.Jsonp]
             )
   )
 
-(def base-url "https://scholars-test.oit.duke.edu/widgets/api/v0.9/people/")
+(def domain
+  (let [doc-domain (.. js/document -domain)]
+    (if-not (string/blank? doc-domain) doc-domain "scholars-dev.oit.duke.edu")
+    )
+  )
+
+(def base-url (str "https://" domain "/widgets/api/v0.9/people/"))
 
 (def base-person-url (str base-url "complete/all.jsonp?uri="))
 
