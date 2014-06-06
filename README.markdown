@@ -26,13 +26,19 @@ want to compile once, run:
 
     lein cljsbuild once development
 
+## Deployment
+
+There is a bash script to handle deployment. You can run it like this:
+
+    ./deploy development
+
+You can also specify acceptance or production environments. Note that it is not git-aware. It will work with whatever files you have in your local working tree. It simply compiles the ClojureScript and syncs html, js, and css to the appropriate server. There currently is no rollback. You can handle that locally by checking out a previous git revision and re-running.
+
 ## Development
 
 Open [development.html](development.html) in your browser (Chrome recommended,
 because it works better with [source
 maps](https://github.com/clojure/clojurescript/wiki/Source-maps)).
-
-[Something about Om and React]
 
 ### Set up your editor
 
