@@ -125,3 +125,12 @@
                (str "Commissioned by " commissioning_body ". "))
        (extract-precise-date json) ".")
   )
+
+(defn grant-listing [{label :label {:keys [startDate endDate awardedBy
+                                           administeredBy]} :attributes}]
+  (str label
+       (if awardedBy (str ", awarded by " awardedBy))
+       (if administeredBy (str ", administered by " administeredBy))
+       ", " (extract-year startDate) "-" (extract-year endDate)
+       )
+  )
