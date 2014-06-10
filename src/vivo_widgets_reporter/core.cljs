@@ -32,16 +32,16 @@
                                include-positions positions
                                include-courses courses
                                include-grants grants
-                               include-art-works artisticWorks
+                               include-artisticWorks artisticWorks
                                include-publications publications 
-                               include-geofoci geographicalFocus]}]
+                               include-geographicalFocus geographicalFocus]}]
   (dom/div nil
     (if include-positions    (list-section "Appointments" (map :label positions)))
     (if include-overview     (dangerous-html-section "Overview" overview))
-    (if include-geofoci      (list-section "Geographical Focus" (map :label geographicalFocus)))
+    (if include-geographicalFocus      (list-section "Geographical Focus" (map :label geographicalFocus)))
     (if include-courses      (list-section "Courses" (map :label courses)))
     (if include-grants      (list-section "Grants" (map :label grants)))
-    (if include-art-works    (list-section "Artistic Works" (map #(art-work-citation %) artisticWorks)))
+    (if include-artisticWorks    (list-section "Artistic Works" (map #(art-work-citation %) artisticWorks)))
     (if include-publications (list-section "Publications" (map #(pub-citation %) publications)))
    )
   )
@@ -101,9 +101,9 @@
 
        :include-overview true
        :include-positions true
-       :include-geofoci true
+       :include-geographicalFocus true
        :include-publications true
-       :include-art-works true
+       :include-artisticWorks true
        :include-courses true
        :include-grants true
        }
@@ -138,10 +138,10 @@
         (dom/form #js {:className "form-inline"}
           (include-checkbox owner state :include-overview "Overview")
           (include-checkbox owner state :include-positions "Appointments")
-          (include-checkbox owner state :include-geofoci "Geographical Focus")
+          (include-checkbox owner state :include-geographicalFocus "Geographical Focus")
           (include-checkbox owner state :include-courses "Courses")
           (include-checkbox owner state :include-grants "Grants")
-          (include-checkbox owner state :include-art-works "Artistic Works")
+          (include-checkbox owner state :include-artisticWorks "Artistic Works")
           (include-checkbox owner state :include-publications "Publications")
           )
         (dom/form #js {:className "form-horizontal"}

@@ -8,7 +8,10 @@
 ;Defaults to scholars-test for local work in a file
 (def domain
   (let [doc-domain (.. js/document -domain)]
-    (if-not (string/blank? doc-domain) doc-domain "scholars-test.oit.duke.edu")
+    (if-not (or (string/blank? doc-domain)
+                (= "localhost" doc-domain))
+      doc-domain
+      "scholars-test.oit.duke.edu")
     )
   )
 
@@ -33,15 +36,34 @@
   (str preferredTitle)
   )
 
+(defn update-field-preference [owner field value]
+  (om/set-state! owner (keyword (str "include-" (name field))) value)
+  )
+
+(defn handle-new-field-data [owner field data]
+  (if (= data [])
+    (do (om/set-state! owner field [{:label "No data available."}])
+        (update-field-preference owner field false)
+        )
+    (if (nil? data)
+      (do (om/set-state! owner field "No data available.")
+          (update-field-preference owner field false)
+          )
+      ;else
+      (om/set-state! owner field data)
+      )
+    )
+  )
+
 (defn set-overview [json owner]
-  (om/set-state! owner :overview (:overview json))
+  (handle-new-field-data owner :overview (:overview json))
   (om/set-state! owner :heading (create-heading json))
   (om/set-state! owner :subheading (create-subheading json))
   )
 
 (defn set-fields [json owner]
   (let [json-in-clojure (js->clj json :keywordize-keys true)]
-    (dorun (map #(om/set-state! owner % (% json-in-clojure))
+    (dorun (map #(handle-new-field-data owner % (% json-in-clojure))
                 [:positions :geographicalFocus :courses :grants :publications
                  :artisticWorks])
            )
@@ -63,7 +85,7 @@
 
 (defn get-and-set [owner url field]
   (get-jsonp (str url (params owner))
-             #(om/set-state! owner field (js->clj % :keywordize-keys true)))
+             #(handle-new-field-data owner field (js->clj % :keywordize-keys true)))
   )
 
 (defn get-and-set-dated-fields [owner]
