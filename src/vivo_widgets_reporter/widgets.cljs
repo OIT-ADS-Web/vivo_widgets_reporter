@@ -19,9 +19,8 @@
 
 (def base-person-url (str base-url "complete/all.jsonp?uri="))
 
-(def base-publications-url (str base-url "publications/all.jsonp?uri="))
-
-(def base-art-works-url (str base-url "artistic_works/all.jsonp?uri="))
+(defn base-field-url [field]
+  (str base-url field "/all.jsonp?uri="))
 
 (defn params [owner]
   (str (om/get-state owner :faculty-uri)
@@ -50,7 +49,9 @@
           (update-field-preference owner field false)
           )
       ;else
-      (om/set-state! owner field data)
+      (do (om/set-state! owner field data)
+          (update-field-preference owner field true)
+          )
       )
     )
   )
@@ -90,7 +91,8 @@
 
 (defn get-and-set-dated-fields [owner]
   (do
-    (get-and-set owner base-publications-url :publications)
-    (get-and-set owner base-art-works-url :artisticWorks)
+    (get-and-set owner (base-field-url "publications") :publications)
+    (get-and-set owner (base-field-url "artistic_works") :artisticWorks)
+    (get-and-set owner (base-field-url "grants") :grants)
     )
   )
