@@ -17,7 +17,7 @@
     :builds [{:id "development"
               :source-paths ["src"]
               :compiler {
-                :output-to "vivo_widgets_reporter.development.js"
+                :output-to "out/development/vivo_widgets_reporter.development.js"
                 :output-dir "out/development"
                 :optimizations :none
                 :source-map true}}
@@ -26,7 +26,7 @@
               :source-paths ["src" "test"]
               :compiler {:pretty-print true
                          :preamble ["react/react.js"]
-                         :output-to "vivo_widgets_reporter.test.js"
+                         :output-to "out/test/vivo_widgets_reporter.test.js"
                          :output-dir "out/test"
                          :optimizations :whitespace
                          :externs ["react/externs/react.js"]
@@ -36,7 +36,7 @@
              {:id "production"
               :source-paths ["src"]
               :compiler {
-                :output-to "vivo_widgets_reporter.production.js"
+                :output-to "assets/js/vivo_widgets_reporter.production.js"
                 :output-dir "out/production"
                 :optimizations :advanced
                 :pretty-print false

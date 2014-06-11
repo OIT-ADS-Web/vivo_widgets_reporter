@@ -98,7 +98,7 @@
       {
        :faculty-uri (requested-uri)
 
-       :heading "Scholars Report"
+       :heading "Scholar Report"
 
        :include-overview true
        :include-positions true
