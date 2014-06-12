@@ -48,12 +48,16 @@
   (if (or start end) (str prefix start "-" end suffix))
   )
 
+(defn parenthetical [value]
+  (if value (str " (" value ")")))
+
 (defn journal-citation [{label :label {:keys [authorList
                                               publishedIn
                                               publishedBy
                                               volume
                                               issue
                                               year
+                                              subtypes
                                               startPage
                                               endPage]} :attributes}]
   (dom/span nil (cite-authors authorList)
@@ -66,14 +70,19 @@
        "(" (extract-year year) ")"
        (page-numbers startPage endPage :prefix ": ")
        "."
+       (parenthetical subtypes)
        )
   )
 
-(defn book-citation [{label :label {:keys [authorList year publishedBy]} :attributes :as json}]
+(defn book-citation [{label :label {:keys [subtypes
+                                           authorList
+                                           year
+                                           publishedBy]} :attributes}]
   (dom/span nil (cite-authors authorList)
        (dom/em nil (title label))
        (if publishedBy (str publishedBy ", "))
        (extract-year year) "."
+       (parenthetical subtypes)
        )
   )
 
@@ -81,6 +90,7 @@
                                               year
                                               startPage
                                               endPage
+                                              subtypes
                                               parentBookTitle
                                               publishedBy]} :attributes}]
   (dom/span nil (cite-authors authorList)
@@ -89,6 +99,7 @@
        (page-numbers startPage endPage :suffix ". ")
        (if publishedBy (str publishedBy ", "))
        (extract-year year) "."
+       (parenthetical subtypes)
        )
   )
 
