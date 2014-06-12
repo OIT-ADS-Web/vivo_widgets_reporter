@@ -3,6 +3,7 @@
             [om.dom :as dom :include-macros true]
             [clojure.string :as string]
             [vivo_widgets_reporter.widgets :as widgets]
+            [vivo_widgets_reporter.dom-utils :as dom-utils]
             [vivo_widgets_reporter.select :as select]
             [vivo_widgets_reporter.citations :refer [pub-citations
                                                      grant-listing
@@ -15,7 +16,7 @@
 
 (defn report-section [title content]
   (dom/div nil 
-    (dom/h3 nil title)
+    (dom/h2 nil title)
     content
     ))
 
@@ -25,9 +26,7 @@
                   ))
 
 (defn list-section [title items]
-  (report-section title
-                  (apply dom/ul #js {:className "unstyled"}
-                         (map (fn [item] (dom/li nil item)) items))))
+  (report-section title (dom-utils/unstyled-list items)))
 
 (defn generate-report [{:keys [include-overview overview 
                                include-positions positions

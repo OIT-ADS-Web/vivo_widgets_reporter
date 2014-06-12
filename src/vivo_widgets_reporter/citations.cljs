@@ -1,6 +1,7 @@
 (ns vivo_widgets_reporter.citations
   (:require [clojure.string :as string]
             [om.dom :as dom :include-macros true]
+            [vivo_widgets_reporter.dom-utils :as dom-utils]
             )
   )
 
@@ -110,14 +111,12 @@
 
 (defn pub-citations [pub-data]
   (let [sorted-pub-data (group-by :vivoType pub-data)]
-    (apply dom/div #js {:className "pub-content"} (map
-                         #(dom/div nil (dom/h4 nil (first %))
-                                   (apply dom/ul #js {:className "unstyled"}
-                                          (map (fn [item]
-                                                 (dom/li nil (pub-citation item)))
-                                               (second %)))
-                                   )
-                         sorted-pub-data))
+    (apply dom/div #js {:className "pub-content"}
+           (map
+             #(dom/div nil
+               (dom/h3 nil (first %))
+               (dom-utils/unstyled-list (map pub-citation (second %))))
+             sorted-pub-data))
     )
   )
 
