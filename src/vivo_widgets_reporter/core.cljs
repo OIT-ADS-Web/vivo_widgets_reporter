@@ -4,7 +4,7 @@
             [clojure.string :as string]
             [vivo_widgets_reporter.widgets :as widgets]
             [vivo_widgets_reporter.select :as select]
-            [vivo_widgets_reporter.citations :refer [pub-citation
+            [vivo_widgets_reporter.citations :refer [pub-citations
                                                      grant-listing
                                                      art-work-citation]]
             ))
@@ -43,7 +43,7 @@
     (if include-courses      (list-section "Courses" (map :label courses)))
     (if include-grants      (list-section "Grants" (map #(grant-listing %) grants)))
     (if include-artisticWorks    (list-section "Artistic Works" (map #(art-work-citation %) artisticWorks)))
-    (if include-publications (list-section "Publications" (map #(pub-citation %) publications)))
+    (if include-publications (report-section "Publications" (pub-citations publications)))
    )
   )
 

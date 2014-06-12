@@ -108,6 +108,19 @@
     )
   )
 
+(defn pub-citations [pub-data]
+  (let [sorted-pub-data (group-by :vivoType pub-data)]
+    (apply dom/div #js {:className "pub-content"} (map
+                         #(dom/div nil (dom/h4 nil (first %))
+                                   (apply dom/ul #js {:className "unstyled"}
+                                          (map (fn [item]
+                                                 (dom/li nil (pub-citation item)))
+                                               (second %)))
+                                   )
+                         sorted-pub-data))
+    )
+  )
+
 (defn extract-precise-date [{{:keys [date date_precision]} :attributes}]
   (cond
     (re-matches #".*yearPrecision" date_precision)         (extract-year date)
