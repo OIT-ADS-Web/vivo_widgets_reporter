@@ -109,34 +109,6 @@
     )
   )
 
-(defn type->header [vivoType]
-  (cond
-    (re-matches #".*AcademicArticle" vivoType) "Academic Articles"
-    (re-matches #".*OtherArticle" vivoType)    "Other Articles"
-    (re-matches #".*ConferencePaper" vivoType) "Conference Papers"
-    (re-matches #".*Dataset" vivoType)         "Datasets"
-    (re-matches #".*Software" vivoType)        "Software"
-    (re-matches #".*DigitalPublication" vivoType) "Digital Publications"
-    ;Matches "EditedBook" too
-    (re-matches #".*Book" vivoType)            "Books"
-    (re-matches #".*Report" vivoType)          "Reports"
-    (re-matches #".*Thesis" vivoType)          "Theses"
-    (re-matches #".*BookSection" vivoType)     "Book Sections"
-    :else "Other Publications"
-    )
-  )
-
-(defn pub-citations [pub-data]
-  (let [sorted-pub-data (group-by :vivoType pub-data)]
-    (apply dom/div #js {:className "pub-content"}
-           (map
-             #(dom/div nil
-               (dom/h3 nil (type->header (first %)))
-               (dom-utils/unstyled-list (map pub-citation (second %))))
-             sorted-pub-data))
-    )
-  )
-
 (defn extract-precise-date [{{:keys [date date_precision]} :attributes}]
   (cond
     (re-matches #".*yearPrecision" date_precision)         (extract-year date)
@@ -154,6 +126,50 @@
                (str "Commissioned by " commissioning_body ". "))
        (extract-precise-date json) ".")
   )
+
+(defn type->header [vivoType items]
+  (cond
+    (re-matches #".*AcademicArticle" vivoType) "Academic Articles"
+    (re-matches #".*OtherArticle" vivoType)    "Other Articles"
+    (re-matches #".*ConferencePaper" vivoType) "Conference Papers"
+    (re-matches #".*Dataset" vivoType)         "Datasets"
+    (re-matches #".*Software" vivoType)        "Software"
+    (re-matches #".*DigitalPublication" vivoType) "Digital Publications"
+    ;Matches "EditedBook" too
+    (re-matches #".*Book" vivoType)            "Books"
+    (re-matches #".*Report" vivoType)          "Reports"
+    (re-matches #".*Thesis" vivoType)          "Theses"
+    (re-matches #".*BookSection" vivoType)     "Book Sections"
+
+    (re-matches #".*MultipleTypes" vivoType) "Multiple Types"
+    (re-matches #".*Exhibit" vivoType) "Exhibits"
+    (re-matches #".*Installation" vivoType) "Installations"
+    (re-matches #".*Photograph" vivoType) "Photography"
+    (re-matches #".*RadioTelevisionProgram" vivoType) "Radio / Television"
+    (re-matches #".*Script" vivoType) "Scripts"
+    (re-matches #".*VideoRecording" vivoType) "Video"
+    (re-matches #".*duke-art-extension.*" vivoType)
+      (get-in (first items) [:attributes :type_description])
+    :else "Other"
+    )
+  )
+
+(defn citations [data cite-fn]
+  (let [sorted-data (group-by :vivoType data)]
+    (apply dom/div nil
+           (map
+             #(dom/div nil
+               (dom/h3 nil (type->header (first %) (second %)))
+               (dom-utils/unstyled-list (map cite-fn (second %))))
+             sorted-data))
+    )
+  )
+
+(defn pub-citations [pub-data]
+  (citations pub-data pub-citation))
+
+(defn art-citations [art-data]
+  (citations art-data art-work-citation))
 
 (defn grant-listing [{label :label {:keys [startDate endDate awardedBy
                                            administeredBy]} :attributes}]

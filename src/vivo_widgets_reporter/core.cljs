@@ -7,7 +7,7 @@
             [vivo_widgets_reporter.select :as select]
             [vivo_widgets_reporter.citations :refer [pub-citations
                                                      grant-listing
-                                                     art-work-citation]]
+                                                     art-citations]]
             ))
 
 (enable-console-print!)
@@ -36,13 +36,17 @@
                                include-publications publications 
                                include-geographicalFocus geographicalFocus]}]
   (dom/div nil
-    (if include-positions    (list-section "Appointments" (map :label positions)))
-    (if include-overview     (dangerous-html-section "Overview" overview))
-    (if include-geographicalFocus      (list-section "Geographical Focus" (map :label geographicalFocus)))
-    (if include-courses      (list-section "Courses" (map :label courses)))
-    (if include-grants      (list-section "Grants" (map #(grant-listing %) grants)))
-    (if include-artisticWorks    (list-section "Artistic Works" (map #(art-work-citation %) artisticWorks)))
-    (if include-publications (report-section "Publications" (pub-citations publications)))
+    (if include-positions (list-section "Appointments" (map :label positions)))
+    (if include-overview (dangerous-html-section "Overview" overview))
+    (if include-geographicalFocus (list-section "Geographical Focus"
+                                                (map :label geographicalFocus)))
+    (if include-courses (list-section "Courses" (map :label courses)))
+    (if include-grants (list-section "Grants"
+                                          (map #(grant-listing %) grants)))
+    (if include-artisticWorks (report-section "Artistic Works"
+                                               (art-citations artisticWorks)))
+    (if include-publications (report-section "Publications"
+                                             (pub-citations publications)))
    )
   )
 
