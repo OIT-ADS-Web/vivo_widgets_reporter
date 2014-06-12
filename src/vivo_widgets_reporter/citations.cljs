@@ -69,9 +69,9 @@
        )
   )
 
-(defn book-citation [{label :label {:keys [authorList year publishedBy]} :attributes}]
+(defn book-citation [{label :label {:keys [authorList year publishedBy]} :attributes :as json}]
   (dom/span nil (cite-authors authorList)
-       (dom/em (title label))
+       (dom/em nil (title label))
        (if publishedBy (str publishedBy ", "))
        (extract-year year) "."
        )
@@ -109,12 +109,29 @@
     )
   )
 
+(defn type->header [vivoType]
+  (cond
+    (re-matches #".*AcademicArticle" vivoType) "Academic Articles"
+    (re-matches #".*OtherArticle" vivoType)    "Other Articles"
+    (re-matches #".*ConferencePaper" vivoType) "Conference Papers"
+    (re-matches #".*Dataset" vivoType)         "Datasets"
+    (re-matches #".*Software" vivoType)        "Software"
+    (re-matches #".*DigitalPublication" vivoType) "Digital Publications"
+    ;Matches "EditedBook" too
+    (re-matches #".*Book" vivoType)            "Books"
+    (re-matches #".*Report" vivoType)          "Reports"
+    (re-matches #".*Thesis" vivoType)          "Theses"
+    (re-matches #".*BookSection" vivoType)     "Book Sections"
+    :else "Other Publications"
+    )
+  )
+
 (defn pub-citations [pub-data]
   (let [sorted-pub-data (group-by :vivoType pub-data)]
     (apply dom/div #js {:className "pub-content"}
            (map
              #(dom/div nil
-               (dom/h3 nil (first %))
+               (dom/h3 nil (type->header (first %)))
                (dom-utils/unstyled-list (map pub-citation (second %))))
              sorted-pub-data))
     )
