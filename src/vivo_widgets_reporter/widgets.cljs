@@ -8,8 +8,9 @@
 ;Defaults to scholars-test for local work in a file
 (def domain
   (let [doc-domain (.. js/document -domain)]
-    (if-not (or (string/blank? doc-domain)
-                (= "localhost" doc-domain))
+    (if-not (or (string/blank? doc-domain) ; opening as file://
+                (= "127.0.0.1" doc-domain) ; testing
+                (= "localhost" doc-domain)) ; local dev server
       doc-domain
       "scholars-test.oit.duke.edu")
     )
