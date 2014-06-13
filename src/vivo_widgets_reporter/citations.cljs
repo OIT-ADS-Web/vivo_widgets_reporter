@@ -165,8 +165,11 @@
     )
   )
 
+(defn unavailable? [data]
+  (= (:label data) "No data available."))
+
 (defn citations [data cite-fn]
-  (if (= (:label (first data)) "No data available.")
+  (if (unavailable? (first data))
     "No data available."
     (let [sorted-data (group-by :vivoType data)]
       (apply dom/div nil
@@ -175,8 +178,7 @@
                          (dom/h3 nil (type->header (first %) (second %)))
                          (dom-utils/unstyled-list (map cite-fn (second %))))
                sorted-data))
-      ))
-  )
+      )))
 
 (defn pub-citations [pub-data]
   (citations pub-data pub-citation))
@@ -185,10 +187,11 @@
   (citations art-data art-work-citation))
 
 (defn grant-listing [{label :label {:keys [startDate endDate awardedBy
-                                           administeredBy]} :attributes}]
-  (str label
-       (if awardedBy (str ", awarded by " awardedBy))
-       (if administeredBy (str ", administered by " administeredBy))
-       ", " (extract-year startDate) "-" (extract-year endDate)
-       )
-  )
+                                           administeredBy]} :attributes :as data}]
+  (if (unavailable? data)
+    label
+    (str label
+         (if awardedBy (str ", awarded by " awardedBy))
+         (if administeredBy (str ", administered by " administeredBy))
+         ", " (extract-year startDate) "-" (extract-year endDate)
+         )))

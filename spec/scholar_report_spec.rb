@@ -6,28 +6,40 @@ RSpec.describe 'Scholar Report', type: :feature, js: true do
     expect(page).to have_content('Scholar Report')
   end
 
-  it "inserts scholar's name" do
-    visit_report_for('9084042')
-    expect(page).to have_content('Natalie Ammarell')
-  end
+  context "for person with only appointments" do
+    it "inserts scholar's name" do
+      visit_report_for('9084042')
+      expect(page).to have_content('Natalie Ammarell')
+    end
 
-  it "shows 'no data available' for art works and publications" do
-    visit_report_for('9084042')
-    check 'include-artisticWorks'
-    art_works_section = find("#artistic-works")
-    expect(art_works_section).to have_content('No data available.')
-    expect(art_works_section).not_to have_selector('h3')
-  end
+    it "shows 'no data available' for art, pubs, grants" do
+      visit_report_for('9084042')
+      check 'include-artisticWorks'
+      art_works_section = find("#artistic-works")
+      expect(art_works_section).not_to have_selector('h3')
+      expect(art_works_section.find('span').text).to eq('No data available.')
 
-  it "registers date filtering" do
-    visit_report_for('9084042')
-    find("input#start").click
-    choose_date('Jan 15 2012')
-    expect(page).to have_content('from 2012-01-15')
+      check 'include-publications'
+      pub_section = find("#publications")
+      expect(pub_section).not_to have_selector('h3')
+      expect(pub_section.find('span').text).to eq('No data available.')
 
-    find("input#end").click
-    choose_date('Feb 22 2014')
-    expect(page).to have_content('until 2014-02-22')
+      check 'include-grants'
+      grant_section = find("#grants")
+      expect(grant_section).not_to have_selector('h3')
+      expect(grant_section.find('li').text).to eq('No data available.')
+    end
+
+    it "registers date filtering" do
+      visit_report_for('9084042')
+      find("input#start").click
+      choose_date('Jan 15 2012')
+      expect(page).to have_content('from 2012-01-15')
+
+      find("input#end").click
+      choose_date('Feb 22 2014')
+      expect(page).to have_content('until 2014-02-22')
+    end
   end
 
   def visit_report_for(id)
