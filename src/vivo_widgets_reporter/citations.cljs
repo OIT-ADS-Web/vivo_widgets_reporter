@@ -166,20 +166,23 @@
   )
 
 (defn citations [data cite-fn]
-  (let [sorted-data (group-by :vivoType data)]
-    (apply dom/div nil
-           (map
-             #(dom/div nil
-               (dom/h3 nil (type->header (first %) (second %)))
-               (dom-utils/unstyled-list (map cite-fn (second %))))
-             sorted-data))
-    )
+  (if (= (:label (first data)) "No data available.")
+    "No data available."
+    (let [sorted-data (group-by :vivoType data)]
+      (apply dom/div nil
+             (map
+               #(dom/div nil
+                         (dom/h3 nil (type->header (first %) (second %)))
+                         (dom-utils/unstyled-list (map cite-fn (second %))))
+               sorted-data))
+      ))
   )
 
 (defn pub-citations [pub-data]
   (citations pub-data pub-citation))
 
 (defn art-citations [art-data]
+  (.log js/console (str art-data))
   (citations art-data art-work-citation))
 
 (defn grant-listing [{label :label {:keys [startDate endDate awardedBy

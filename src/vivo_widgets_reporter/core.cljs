@@ -15,7 +15,7 @@
 (def app-state (atom {}))
 
 (defn report-section [title content]
-  (dom/div nil 
+  (dom/div #js {:id (string/replace (string/lower-case title) #"\s" "-")} 
     (dom/h2 nil title)
     content
     ))
@@ -73,6 +73,7 @@
   (dom/label #js {:className "checkbox"}
     (dom/input
       #js {:type "checkbox" :checked (preference state)
+           :id (name preference)
            :onChange #(update-preference % owner preference)}
       )
     label))
