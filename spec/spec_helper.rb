@@ -8,3 +8,9 @@ Capybara.app = Rack::Builder.new do |env|
     run VivoWidgetsReporterApp
   end
 end
+
+RSpec.configure do |config|
+  config.before(:suite) do
+    system("lein cljsbuild once development")
+  end
+end

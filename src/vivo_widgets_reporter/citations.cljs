@@ -182,7 +182,6 @@
   (citations pub-data pub-citation))
 
 (defn art-citations [art-data]
-  (.log js/console (str art-data))
   (citations art-data art-work-citation))
 
 (defn grant-listing [{label :label {:keys [startDate endDate awardedBy

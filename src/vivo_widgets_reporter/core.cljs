@@ -54,7 +54,7 @@
   (om/set-state! owner preference (.. e -target -checked)))
 
 (defn is-a-valid-date [string]
-  (re-matches #"\d{4}-(?:0|1)\d-(?:0|1)\d" string)
+  (re-matches #"\d{4}-(?:0|1)\d-(?:0|1|2|3)\d" string)
   )
 
 (defn update-date-delimiter [e owner delimiter]
