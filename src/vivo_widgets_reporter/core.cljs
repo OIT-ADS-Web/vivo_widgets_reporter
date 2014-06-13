@@ -28,13 +28,13 @@
 (defn list-section [title items]
   (report-section title (dom-utils/unstyled-list items)))
 
-(defn generate-report [{:keys [include-overview overview 
-                               include-positions positions
+(defn generate-report [{:keys [ include-positions positions
+                               include-overview overview 
+                               include-geographicalFocus geographicalFocus
                                include-courses courses
                                include-grants grants
                                include-artisticWorks artisticWorks
-                               include-publications publications 
-                               include-geographicalFocus geographicalFocus]}]
+                               include-publications publications]}]
   (dom/div nil
     (if include-positions (list-section "Appointments" (map :label positions)))
     (if include-overview (dangerous-html-section "Overview" overview))
