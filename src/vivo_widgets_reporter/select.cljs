@@ -3,23 +3,24 @@
   )
 
 (defn select-all [id]
-  (if (.getSelection js/window)
-    (let [text-range (.createRange js/document)
-          element (.getElementById js/document id)
-          selection (.getSelection js/window)]
-      (do
-        (.selectNode text-range element)
-        (.addRange selection text-range))
-      )
-    (let [text-range (.. js/document -body -createTextRange)
-          element (.getElementById js/document id)]
-      (do
-        (.moveToElementText text-range element)
-        (.select text-range)
-        )
-      )
-    )
-  )
+  (let [element (.getElementById js/document id)]
+
+    (if (.. js/document -body -createTextRange)
+      ; IE9
+      (let [text-range (.. js/document -body createTextRange)]
+        (do (.moveToElementText text-range element)
+            (.select text-range)))
+
+      (let [selection (.getSelection js/window)]
+        (if (.. selection -setBaseAndExtent)
+          ; Chrome, Safari and Opera
+          (.setBaseAndExtent selection element 0 element 1)
+
+          ; Firefox
+          (let [text-range (.createRange js/document)]
+            (do (.selectNode text-range element)
+                (.addRange selection text-range))
+            ))))))
 
 (defn buttons [id]
   (dom/div #js {:className "pull-right "}
