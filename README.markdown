@@ -32,7 +32,11 @@ There is a bash script to handle deployment. You can run it like this:
 
     ./deploy development
 
-You can also specify acceptance or production environments. Note that it is not git-aware. It will work with whatever files you have in your local working tree. It simply compiles the ClojureScript and syncs html, js, and css to the appropriate server. There currently is no rollback. You can handle that locally by checking out a previous git revision and re-running.
+You can also specify acceptance or production environments. Note that it is not
+git-aware. It will work with whatever files you have in your local working
+tree. It simply compiles the ClojureScript and syncs html, js, and css to the
+appropriate server. There currently is no rollback. You can handle that locally
+by checking out a previous git revision and re-running.
 
 ## Development
 
@@ -54,10 +58,15 @@ up a blog post on the process sometime.
 
 ### Run the Tests
 
-The tests require [PhantomJS](http://phantomjs.org). To install with Homebrew:
+The tests require [Firefox, version
+28](http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/28.0/win32/en-US/).
+To run a newer Firefox, update the selenium-webdriver gem.
 
-    brew update && brew install phantomjs
+The tests also require Ruby (~ 2.1) and that you are compiling your ClojureScript.
 
-To run from the base directory:
+    bundle install
+    lein cljsbuild auto development
+    bundle exec rspec spec/
 
-    lein test
+The tests currently hit live data, so it is possible that this will cause
+intermittent failures.
