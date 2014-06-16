@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -o errexit
 
 ENVIRONMENT=${1:-"development"}
 deploy_dir="/srv/web/apps/vivo_widgets_reporter"
@@ -27,7 +28,7 @@ for SERVER in "${SERVERS[@]}"; do
   rsync -avz production.html torquebox@$SERVER:$deploy_dir/scholar_report.html
 
   echo "creating asset directory on $SERVER..."
-  ssh torquebox@$SERVER "mkdir $deploy_dir/assets"
+  ssh torquebox@$SERVER "[ -d $deploy_dir/assets ] || mkdir $deploy_dir/assets"
 
   echo "rsyncing asset files to $SERVER..."
   rsync -avz assets/css/*.css torquebox@$SERVER:$deploy_dir/assets/css/
