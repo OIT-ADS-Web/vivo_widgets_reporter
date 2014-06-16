@@ -56,10 +56,14 @@ h6 {
   padding: 0;
   margin-bottom: 0; }
 
-.container-fluid {padding-left: 40px;}
+.container-fluid {
+  padding-left: 40px;
+  max-width: 960px;
+  margin: 0 auto;
+}
 
 #content {
-  padding-left: 16%;
+  padding-left: 5%;
   min-height: 300px; }
 
 .row-fluid [class*="span"] {
