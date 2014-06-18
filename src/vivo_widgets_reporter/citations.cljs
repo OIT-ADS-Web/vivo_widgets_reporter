@@ -49,7 +49,7 @@
   )
 
 (defn parenthetical [value]
-  (if value (str " (" value ")")))
+  (if-not (string/blank? value) (str " (" value ")")))
 
 (defn journal-citation [{label :label {:keys [authorList
                                               publishedIn
@@ -62,7 +62,8 @@
                                               endPage]} :attributes}]
   (dom/span nil (cite-authors authorList)
        (title label)
-       (if publishedIn (dom/em nil publishedIn " ")
+       (if publishedIn
+         (dom/em nil publishedIn " ")
          (if publishedBy (dom/em nil publishedBy " ")))
        volume
        (if issue (str ", no. " issue))
