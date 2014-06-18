@@ -36,12 +36,12 @@
   )
 
 (defn title [label & {:keys [surround]}]
-  (str
+  (dom/span (clj->js {:dangerouslySetInnerHTML {:__html (str
     surround
     (if (re-matches #".*\." label) label (str label "."))
     surround
     " "
-    )
+    )}}))
   )
 
 (defn page-numbers [start end & {:keys [prefix suffix]}]
