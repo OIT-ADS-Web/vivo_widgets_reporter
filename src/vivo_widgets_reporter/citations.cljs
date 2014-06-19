@@ -67,8 +67,7 @@
          (if publishedBy (dom/em nil publishedBy " ")))
        volume
        (if issue (str ", no. " issue))
-       (if (or volume issue) " ")
-       "(" (extract-year year) ")"
+       (if (and (or volume issue) year) (str " " "(" (extract-year year) ")"))
        (page-numbers startPage endPage :prefix ": ")
        "."
        (parenthetical subtypes)
