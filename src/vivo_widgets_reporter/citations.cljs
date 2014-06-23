@@ -103,22 +103,26 @@
        )
   )
 
-(defn pub-citation [{:keys [vivoType] :as json}]
-  (cond
-    (re-matches #".*AcademicArticle" vivoType) (journal-citation json)
-    (re-matches #".*OtherArticle" vivoType)    (journal-citation json)
-    (re-matches #".*ConferencePaper" vivoType) (journal-citation json)
-    (re-matches #".*Dataset" vivoType)         (journal-citation json)
-    (re-matches #".*Software" vivoType)        (journal-citation json)
-    (re-matches #".*DigitalPublication" vivoType) (journal-citation json)
-    ;Matches "EditedBook" too
-    (re-matches #".*Book" vivoType)            (book-citation json)
-    (re-matches #".*Report" vivoType)          (book-citation json)
-    (re-matches #".*Thesis" vivoType)          (book-citation json)
-    (re-matches #".*BookSection" vivoType)     (section-citation json)
-    :else (journal-citation json)
-    )
-  )
+(defn pub-citation [{vivoType :vivoType
+                     {:keys [chicagoCitation]} :attributes
+                     :as json}]
+  (if chicagoCitation
+    (dom/span (clj->js {:dangerouslySetInnerHTML {:__html chicagoCitation}}))
+    (cond
+      (re-matches #".*AcademicArticle" vivoType) (journal-citation json)
+      (re-matches #".*OtherArticle" vivoType)    (journal-citation json)
+      (re-matches #".*ConferencePaper" vivoType) (journal-citation json)
+      (re-matches #".*Dataset" vivoType)         (journal-citation json)
+      (re-matches #".*Software" vivoType)        (journal-citation json)
+      (re-matches #".*DigitalPublication" vivoType) (journal-citation json)
+      ;Matches "EditedBook" too
+      (re-matches #".*Book" vivoType)            (book-citation json)
+      (re-matches #".*Report" vivoType)          (book-citation json)
+      (re-matches #".*Thesis" vivoType)          (book-citation json)
+      (re-matches #".*BookSection" vivoType)     (section-citation json)
+      :else (journal-citation json)
+      )
+    ))
 
 (defn extract-precise-date [{{:keys [date date_precision]} :attributes}]
   (cond
