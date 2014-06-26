@@ -34,7 +34,8 @@
                                include-courses courses
                                include-grants grants
                                include-artisticWorks artisticWorks
-                               include-publications publications]}]
+                               include-publications publications
+                               citation-format ]}]
   (dom/div nil
     (if include-positions (list-section "Appointments" (map :label positions)))
     (if include-overview (dangerous-html-section "Overview" overview))
@@ -49,7 +50,8 @@
     (if include-artisticWorks
       (report-section "Artistic Works" (art-citations artisticWorks)))
     (if include-publications
-      (report-section "Publications" (pub-citations publications)))
+      (report-section "Publications" (pub-citations publications
+                                                    citation-format)))
    ))
 
 (defn update-preference [e owner preference]
@@ -113,6 +115,8 @@
        :include-artisticWorks true
        :include-courses true
        :include-grants true
+
+       :citation-format "chicagoCitation"
        }
       )
     om/IWillMount
@@ -135,6 +139,7 @@
     om/IRenderState
     (render-state [this state]
       (dom/div nil
+        (select/buttons "report")
         (dom/h2 nil (:heading state) 
           (if-not (string/blank? (:start state))
                   (dom/span nil (str ", from " (:start state)) ))
@@ -142,21 +147,36 @@
                   (dom/span nil (str ", until " (:end state)) ))
           )
         (dom/p nil (:subheading state))
-        (dom/form #js {:className "form-inline"}
-          (include-checkbox owner state :include-overview "Overview")
-          (include-checkbox owner state :include-positions "Appointments")
-          (include-checkbox owner state :include-geographicalFocus "Geographical Focus")
-          (include-checkbox owner state :include-courses "Courses")
-          (include-checkbox owner state :include-grants "Grants")
-          (include-checkbox owner state :include-artisticWorks "Artistic Works")
-          (include-checkbox owner state :include-publications "Publications")
-          )
-        (dom/form #js {:className "form-horizontal"}
-          (date-input owner state :start "Start Date")
-          (date-input owner state :end "End Date")
-          )
-        (select/buttons "report")
-        (dom/div #js {:id "report" :className "well"}
+        (dom/div #js {:className "span12 well" :id "options"}
+          (dom/form #js {:className "form-inline"}
+            (include-checkbox owner state :include-overview "Overview")
+            (include-checkbox owner state :include-positions "Appointments")
+            (include-checkbox owner state :include-geographicalFocus "Geographical Focus")
+            (include-checkbox owner state :include-courses "Courses")
+            (include-checkbox owner state :include-grants "Grants")
+            (include-checkbox owner state :include-artisticWorks "Artistic Works")
+            (include-checkbox owner state :include-publications "Publications")
+            )
+          (dom/form #js {:className "form-horizontal span6"}
+            (date-input owner state :start "Start Date")
+            (date-input owner state :end "End Date")
+            )
+          (if (:include-publications state)
+            (dom/form nil
+              (dom/label nil "Choose citation format:")
+              (dom/select #js {:id "citation-format-preference"
+                               :onChange #(om/set-state! owner :citation-format
+                                                         (.. % -target -value))
+                               }
+                         (dom/option #js {:value "chicagoCitation"} "Chicago Manual of Style")
+                         (dom/option #js {:value "mlaCitation"} "Modern Language Association (MLA)")
+                         (dom/option #js {:value "apaCitation"} "American Psychological Association (APA)")
+                         (dom/option #js {:value "icmjeCitation"} "International Committee of Medical Journal Editors (ICMJE)")
+                         )
+             )
+            )
+                 )
+        (dom/div #js {:id "report" :className "span12 well"}
           (generate-report state)
           )
         )

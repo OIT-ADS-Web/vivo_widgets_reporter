@@ -23,7 +23,7 @@
             ))))))
 
 (defn buttons [id]
-  (dom/div #js {:className "pull-right "}
+  (dom/div #js {:className "pull-right" :data-spy "affix" :data-offset-top "165"}
            (dom/a #js {:className "btn btn-large btn-primary"
                        :onClick #(select-all id)}
-                  "Select all")))
+                  "Select Report Text")))

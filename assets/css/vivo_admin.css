@@ -315,16 +315,18 @@ div.well-small {
 
 .affix {
   top: 0;
-  width: 100%; }
+  right: 20px;
+}
 
 .affix-container {
   height: 50px; }
 
+#options {background-color: #CFEDED;}
+
 .wide-text-area {
   width: 79%; }
 
-.well-very-small {
-  padding: 0; }
+.well {padding-bottom: 5px;}
 
 /* Media queries */
 @media (max-width: 900px) {
