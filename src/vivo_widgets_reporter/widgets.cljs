@@ -12,11 +12,11 @@
                 (= "127.0.0.1" doc-domain) ; testing
                 (= "localhost" doc-domain)) ; local dev server
       doc-domain
-      "localhost:8080")
+      "scholars-test.oit.duke.edu")
     )
   )
 
-(def base-url (str "http://" domain "/api/v0.9/people/"))
+(def base-url (str "https://" domain "/widgets/api/v0.9/people/"))
 
 (def base-person-url (str base-url "complete/all.jsonp?uri="))
 
