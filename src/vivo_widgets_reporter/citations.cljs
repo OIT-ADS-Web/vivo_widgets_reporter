@@ -103,14 +103,18 @@
        )
   )
 
-(defn- strip-links [html]
-  (string/replace html #"</?a[^>]*>" ""))
+(defn- strip-links [html should-keep-links]
+  (if should-keep-links
+    html
+    (string/replace html #"</?a[^>]*>" "")
+   )
+  )
 
-(defn- pub-citation [{vivoType :vivoType :as json} citation-format]
+(defn- pub-citation [{vivoType :vivoType :as json} citation-format link-pref]
   (let [citation (get-in json [:attributes (keyword citation-format)])]
     (if citation
       (dom/span (clj->js {:dangerouslySetInnerHTML
-                          {:__html (strip-links citation)}}))
+                          {:__html (strip-links citation link-pref)}}))
       (cond
         (re-matches #".*AcademicArticle" vivoType) (journal-citation json)
         (re-matches #".*OtherArticle" vivoType)    (journal-citation json)
@@ -188,8 +192,8 @@
                sorted-data))
       )))
 
-(defn pub-citations [pub-data citation-format]
-  (citations pub-data #(pub-citation % citation-format)))
+(defn pub-citations [pub-data citation-format link-pref]
+  (citations pub-data #(pub-citation % citation-format link-pref)))
 
 (defn art-citations [art-data]
   (citations art-data art-work-citation))

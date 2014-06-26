@@ -35,7 +35,7 @@
                                include-grants grants
                                include-artisticWorks artisticWorks
                                include-publications publications
-                               citation-format ]}]
+                               citation-format include-pub-links]}]
   (dom/div nil
     (if include-positions (list-section "Appointments" (map :label positions)))
     (if include-overview (dangerous-html-section "Overview" overview))
@@ -51,7 +51,9 @@
       (report-section "Artistic Works" (art-citations artisticWorks)))
     (if include-publications
       (report-section "Publications" (pub-citations publications
-                                                    citation-format)))
+                                                    citation-format
+                                                    include-pub-links
+                                                    )))
    ))
 
 (defn update-preference [e owner preference]
@@ -117,6 +119,7 @@
        :include-grants true
 
        :citation-format "chicagoCitation"
+       :include-pub-links false
        }
       )
     om/IWillMount
@@ -166,16 +169,20 @@
               (dom/label nil "Choose citation format:")
               (dom/select #js {:id "citation-format-preference"
                                :onChange #(om/set-state! owner :citation-format
-                                                         (.. % -target -value))
-                               }
-                         (dom/option #js {:value "chicagoCitation"} "Chicago Manual of Style")
-                         (dom/option #js {:value "mlaCitation"} "Modern Language Association (MLA)")
-                         (dom/option #js {:value "apaCitation"} "American Psychological Association (APA)")
-                         (dom/option #js {:value "icmjeCitation"} "International Committee of Medical Journal Editors (ICMJE)")
-                         )
-             )
+                                                         (.. % -target -value))}
+                (dom/option #js {:value "chicagoCitation"}
+                            "Chicago Manual of Style")
+                (dom/option #js {:value "mlaCitation"}
+                            "Modern Language Association (MLA)")
+                (dom/option #js {:value "apaCitation"}
+                            "American Psychological Association (APA)")
+                (dom/option #js {:value "icmjeCitation"}
+                            "International Committee of Medical Journal Editors (ICMJE)")
+                )
+              (include-checkbox owner state :include-pub-links "Include publication links")
+              )
             )
-                 )
+          )
         (dom/div #js {:id "report" :className "span12 well"}
           (generate-report state)
           )

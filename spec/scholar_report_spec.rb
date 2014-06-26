@@ -115,6 +115,13 @@ RSpec.describe 'Scholar Report', type: :feature, js: true do
         "Lyerly, AD; Namey, EE; Gray, B; Swamy, G; Faden, RR. Women's views about participating in research while pregnant. IRB Ethics and Human Research. 2012;34(4):1-8.")
     end
 
+    it "lets user add links back into pub" do
+      expect(find('#publications')).not_to have_selector('a')
+
+      check 'include-pub-links'
+      expect(find('#publications')).to have_selector('a')
+    end
+
   end
 
   def visit_report_for(id)
