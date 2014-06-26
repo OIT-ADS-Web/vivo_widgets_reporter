@@ -92,6 +92,10 @@ RSpec.describe 'Scholar Report', type: :feature, js: true do
 
     it 'displays publication section' do
       expect(find('#report')).to have_text('Academic Articles')
+      expect(find('#options')).to have_text('Choose citation format')
+
+      uncheck 'include-publications'
+      expect(find('#options')).not_to have_text('Choose citation format')
     end
 
     it 'allows user to choose different citation formats' do
