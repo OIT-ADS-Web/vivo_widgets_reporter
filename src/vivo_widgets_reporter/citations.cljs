@@ -103,10 +103,14 @@
        )
   )
 
-(defn pub-citation [{vivoType :vivoType :as json} citation-format]
+(defn- strip-links [html]
+  (string/replace html #"</?a[^>]*>" ""))
+
+(defn- pub-citation [{vivoType :vivoType :as json} citation-format]
   (let [citation (get-in json [:attributes (keyword citation-format)])]
     (if citation
-      (dom/span (clj->js {:dangerouslySetInnerHTML {:__html citation}}))
+      (dom/span (clj->js {:dangerouslySetInnerHTML
+                          {:__html (strip-links citation)}}))
       (cond
         (re-matches #".*AcademicArticle" vivoType) (journal-citation json)
         (re-matches #".*OtherArticle" vivoType)    (journal-citation json)
