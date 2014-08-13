@@ -124,6 +124,20 @@ RSpec.describe 'Scholar Report', type: :feature, js: true do
 
   end
 
+  context 'for person with multiple publications' do
+    let(:multiple_pub_scholar) {'2845042'}
+
+    before do
+      visit_report_for(multiple_pub_scholar)
+    end
+
+    it 'displays publication sections in alphabetical order' do
+      expect(page.body).to match(
+        /h3.*Academic Articles.*h3.*h3.*Book Sections.*h3.*h3.*Books.*h3.*h3.*Other Articles.*h3.*h3.*Reports.*h3/)
+    end
+
+  end
+
   def visit_report_for(id)
     visit "/development.html?uri=https://scholars.duke.edu/individual/per#{id}"
   end
