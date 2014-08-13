@@ -44,6 +44,14 @@ Open [development.html](development.html) in your browser (Chrome recommended,
 because it works better with [source
 maps](https://github.com/clojure/clojurescript/wiki/Source-maps)).
 
+You can access the development version of the reporter by setting up a basic Web server:
+
+    python -m SimpleHTTPServer 8000
+
+Then going to:
+
+    localhost:8000/development.html?uri=<some_uri>
+
 ### Set up your editor
 
 Here are some helpful hacks for your vim setup. (If in Emacs, no worries,
