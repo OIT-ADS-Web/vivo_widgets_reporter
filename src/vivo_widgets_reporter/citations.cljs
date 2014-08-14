@@ -150,8 +150,7 @@
        (extract-precise-date json) ".")
   )
 
-(defn type->header [vivoType type-description]
-  (.log js/console vivoType)
+(defn type->header [vivoType data]
   (cond
     (re-matches #".*AcademicArticle" vivoType) "Academic Articles"
     (re-matches #".*OtherArticle" vivoType)    "Other Articles"
@@ -172,7 +171,8 @@
     (re-matches #".*RadioTelevisionProgram" vivoType) "Radio / Television"
     (re-matches #".*Script" vivoType) "Scripts"
     (re-matches #".*VideoRecording" vivoType) "Video"
-    (re-matches #".*duke-art-extension.*" vivoType) type-description
+    (re-matches #".*duke-art-extension.*" vivoType)
+    (get-in data [:attributes :type_description])
     :else "Other"
     )
   )
@@ -180,11 +180,14 @@
 (defn unavailable? [data]
   (= (:label data) "No data available."))
 
+(defn hash->sorted [hmap]
+  (apply sorted-map (apply concat hmap)))
+
 (defn citations [data cite-fn]
   (if (unavailable? (first data))
     "No data available."
-    (let [sorted-data (apply sorted-map (apply concat (group-by #(type->header (:vivoType %) (get-in % [:attributes :type_description])) data)))]
-      (.log js/console (str sorted-data))
+    (let [sorted-data (hash->sorted (group-by #(type->header (:vivoType %) %)
+                                              data))]
       (apply dom/div nil
              (map
                #(dom/div nil
