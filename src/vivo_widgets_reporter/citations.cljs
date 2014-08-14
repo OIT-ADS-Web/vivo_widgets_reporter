@@ -183,11 +183,12 @@
 (defn citations [data cite-fn]
   (if (unavailable? (first data))
     "No data available."
-    (let [sorted-data (group-by :vivoType data)]
+    (let [sorted-data (apply sorted-map (apply concat (group-by (comp type->header :vivoType) data)))]
+      (.log js/console (str sorted-data))
       (apply dom/div nil
              (map
                #(dom/div nil
-                         (dom/h3 nil (type->header (first %) (second %)))
+                         (dom/h3 nil (first %))
                          (dom-utils/unstyled-list (map cite-fn (second %))))
                sorted-data))
       )))
