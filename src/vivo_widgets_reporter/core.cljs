@@ -142,6 +142,10 @@
     om/IRenderState
     (render-state [this state]
       (dom/div nil
+        (dom/ul #js {:className "span12 breadcrumb"}
+          (dom/li nil
+            (dom/a #js {:href "https://scholars.duke.edu/vivo_admin/"}
+                   "Back to Profile Manager Home")))
         (select/buttons "report")
         (dom/h2 nil (:heading state) 
           (if-not (string/blank? (:start state))
