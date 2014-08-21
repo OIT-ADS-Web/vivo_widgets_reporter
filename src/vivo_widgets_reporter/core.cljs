@@ -172,6 +172,7 @@
             (dom/form nil
               (dom/label nil "Choose citation format:")
               (dom/select #js {:id "citation-format-preference"
+                               :value (:citation-format state)
                                :onChange #(om/set-state! owner :citation-format
                                                          (.. % -target -value))}
                 (dom/option #js {:value "chicagoCitation"}

@@ -61,6 +61,8 @@
   (handle-new-field-data owner :overview (:overview json))
   (om/set-state! owner :heading (create-heading json))
   (om/set-state! owner :subheading (create-subheading json))
+  (when-let [format (:preferredCitationFormat json)]
+    (om/set-state! owner :citation-format (last (string/split format #"#"))))
   )
 
 (defn set-fields [json owner]
