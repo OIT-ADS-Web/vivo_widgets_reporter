@@ -5,10 +5,6 @@
             )
   )
 
-(defn cite-authors [authorList]
-  (if-not (string/blank? authorList) (str authorList ". "))
-  )
-
 (defn extract-year [date]
   (string/join (take 4 date)))
 
@@ -35,74 +31,6 @@
     )
   )
 
-(defn title [label & {:keys [surround]}]
-  (dom/span (clj->js {:dangerouslySetInnerHTML {:__html (str
-    surround
-    (if (re-matches #".*\." label) label (str label "."))
-    surround
-    " "
-    )}}))
-  )
-
-(defn page-numbers [start end & {:keys [prefix suffix]}]
-  (if (or start end) (str prefix start "-" end suffix))
-  )
-
-(defn parenthetical [value]
-  (if-not (string/blank? value) (str " (" value ")")))
-
-(defn journal-citation [{label :label {:keys [authorList
-                                              publishedIn
-                                              publishedBy
-                                              volume
-                                              issue
-                                              year
-                                              subtypes
-                                              startPage
-                                              endPage]} :attributes}]
-  (dom/span nil (cite-authors authorList)
-       (title label)
-       (if publishedIn
-         (dom/em nil publishedIn " ")
-         (if publishedBy (dom/em nil publishedBy " ")))
-       volume
-       (if issue (str ", no. " issue))
-       (if (and (or volume issue) year) (str " " "(" (extract-year year) ")"))
-       (page-numbers startPage endPage :prefix ": ")
-       "."
-       (parenthetical subtypes)
-       )
-  )
-
-(defn book-citation [{label :label {:keys [subtypes
-                                           authorList
-                                           year
-                                           publishedBy]} :attributes}]
-  (dom/span nil (cite-authors authorList)
-       (dom/em nil (title label))
-       (if publishedBy (str publishedBy ", "))
-       (extract-year year) "."
-       (parenthetical subtypes)
-       )
-  )
-
-(defn section-citation [{label :label {:keys [authorList
-                                              year
-                                              startPage
-                                              endPage
-                                              subtypes
-                                              parentBookTitle
-                                              publishedBy]} :attributes}]
-  (dom/span nil (cite-authors authorList)
-       (title label :surround "\"")
-       (if parentBookTitle (dom/em nil (title parentBookTitle)))
-       (page-numbers startPage endPage :suffix ". ")
-       (if publishedBy (str publishedBy ", "))
-       (extract-year year) "."
-       (parenthetical subtypes)
-       )
-  )
-
 (defn- strip-links [html should-keep-links]
   (if should-keep-links
     html
@@ -112,24 +40,9 @@
 
 (defn- pub-citation [{vivoType :vivoType :as json} citation-format link-pref]
   (let [citation (get-in json [:attributes (keyword citation-format)])]
-    (if citation
       (dom/span (clj->js {:dangerouslySetInnerHTML
                           {:__html (strip-links citation link-pref)}}))
-      (cond
-        (re-matches #".*AcademicArticle" vivoType) (journal-citation json)
-        (re-matches #".*OtherArticle" vivoType)    (journal-citation json)
-        (re-matches #".*ConferencePaper" vivoType) (journal-citation json)
-        (re-matches #".*Dataset" vivoType)         (journal-citation json)
-        (re-matches #".*Software" vivoType)        (journal-citation json)
-        (re-matches #".*DigitalPublication" vivoType) (journal-citation json)
-        ;Matches "EditedBook" too
-        (re-matches #".*Book" vivoType)            (book-citation json)
-        (re-matches #".*Report" vivoType)          (book-citation json)
-        (re-matches #".*Thesis" vivoType)          (book-citation json)
-        (re-matches #".*BookSection" vivoType)     (section-citation json)
-        :else (journal-citation json)
-        )
-      ))
+      )
   )
 
 (defn extract-precise-date [{{:keys [date date_precision]} :attributes}]
