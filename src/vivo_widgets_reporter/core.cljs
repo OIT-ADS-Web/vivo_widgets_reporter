@@ -7,6 +7,7 @@
             [vivo_widgets_reporter.select :as select]
             [vivo_widgets_reporter.citations :refer [pub-citations
                                                      grant-listing
+                                                     award-listing
                                                      art-citations]]
             ))
 
@@ -41,7 +42,7 @@
   (dom/div nil
     (if include-overview (dangerous-html-section "Overview" overview))
     (if include-positions (list-section "Appointments" (map :label positions)))
-    (if include-awards (list-section "Awards" (map :label awards)))
+    (if include-awards (list-section "Awards" (map #(award-listing %) awards)))
     (if include-geographicalFocus
       (list-section "Geographical Focus"
                     (map #(str (:label %) ", "

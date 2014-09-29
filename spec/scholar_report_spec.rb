@@ -147,7 +147,7 @@ RSpec.describe 'Scholar Report', type: :feature, js: true do
     end
 
     it 'displays award section' do
-      expect(find('#awards')).to have_content("World's Most Average Dad")
+      expect(find('#awards')).to have_content("World's Most Average Dad. The Committee. 11/2018")
     end
   end
 

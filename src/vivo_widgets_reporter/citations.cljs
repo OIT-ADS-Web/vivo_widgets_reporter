@@ -45,11 +45,14 @@
       )
   )
 
-(defn extract-precise-date [{{:keys [date date_precision]} :attributes}]
+(defn extract-precise-date [{{:keys [date datePrecision date_precision]} :attributes}]
   (cond
-    (re-matches #".*yearPrecision" date_precision)         (extract-year date)
-    (re-matches #".*yearMonthPrecision" date_precision)    (extract-month-year date)
-    (re-matches #".*yearMonthDayPrecision" date_precision) (extract-month-day-year date)
+    (re-find #"yearPrecision" date_precision)         (extract-year date)
+    (re-find #"yearMonthPrecision" date_precision)    (extract-month-year date)
+    (re-find #"yearMonthDayPrecision" date_precision) (extract-month-day-year date)
+    (re-find #"yearPrecision" datePrecision)         (extract-year date)
+    (re-find #"yearMonthPrecision" datePrecision)    (extract-month-year date)
+    (re-find #"yearMonthDayPrecision" datePrecision) (extract-month-day-year date)
     :else (extract-year date)
     )
   )
@@ -118,9 +121,18 @@
 (defn grant-listing [{label :label {:keys [startDate endDate awardedBy
                                            administeredBy]} :attributes :as data}]
   (if (unavailable? data)
-    label
+    "No data available."
     (str label
          (if awardedBy (str ", awarded by " awardedBy))
          (if administeredBy (str ", administered by " administeredBy))
          ", " (extract-year startDate) "-" (extract-year endDate)
          )))
+
+(defn award-listing [data]
+  (if (unavailable? data)
+    "No data available."
+    (str (:label data) " "
+         (extract-precise-date data) "."
+         )
+    )
+  )
