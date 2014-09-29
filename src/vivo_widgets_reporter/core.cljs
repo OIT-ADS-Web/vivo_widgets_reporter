@@ -28,8 +28,10 @@
 (defn list-section [title items]
   (report-section title (dom-utils/unstyled-list items)))
 
-(defn generate-report [{:keys [ include-positions positions
+(defn generate-report [{:keys [
                                include-overview overview 
+                               include-positions positions
+                               include-awards awards
                                include-geographicalFocus geographicalFocus
                                include-courses courses
                                include-grants grants
@@ -37,8 +39,9 @@
                                include-publications publications
                                citation-format include-pub-links]}]
   (dom/div nil
-    (if include-positions (list-section "Appointments" (map :label positions)))
     (if include-overview (dangerous-html-section "Overview" overview))
+    (if include-positions (list-section "Appointments" (map :label positions)))
+    (if include-awards (list-section "Awards" (map :label awards)))
     (if include-geographicalFocus
       (list-section "Geographical Focus"
                     (map #(str (:label %) ", "
@@ -112,6 +115,7 @@
 
        :include-overview true
        :include-positions true
+       :include-awards true
        :include-geographicalFocus true
        :include-publications true
        :include-artisticWorks true
@@ -158,6 +162,7 @@
           (dom/form #js {:className "form-inline"}
             (include-checkbox owner state :include-overview "Overview")
             (include-checkbox owner state :include-positions "Appointments")
+            (include-checkbox owner state :include-awards "Awards")
             (include-checkbox owner state :include-geographicalFocus "Geographical Focus")
             (include-checkbox owner state :include-courses "Courses")
             (include-checkbox owner state :include-grants "Grants")

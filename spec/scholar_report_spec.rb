@@ -19,6 +19,7 @@ RSpec.describe 'Scholar Report', type: :feature, js: true do
     it "turns empty sections off" do
       expect(find('#include-positions')).to be_checked
       expect(find('#include-overview')).not_to be_checked
+      expect(find('#include-awards')).not_to be_checked
       expect(find('#include-geographicalFocus')).not_to be_checked
       expect(find('#include-courses')).not_to be_checked
       expect(find('#include-grants')).not_to be_checked
@@ -28,6 +29,7 @@ RSpec.describe 'Scholar Report', type: :feature, js: true do
 
       expect(find('#report')).to     have_selector('div#appointments')
       expect(find('#report')).not_to have_selector('div#overview')
+      expect(find('#report')).not_to have_selector('div#awards')
       expect(find('#report')).not_to have_selector('div#geographical-focus')
       expect(find('#report')).not_to have_selector('div#courses')
       expect(find('#report')).not_to have_selector('div#grants')
@@ -138,6 +140,17 @@ RSpec.describe 'Scholar Report', type: :feature, js: true do
 
   end
 
+  context 'for person with one award' do
+    let(:one_award_winner) {'pmm21'}
+    before do
+      visit_report_for(one_award_winner)
+    end
+
+    it 'displays award section' do
+      expect(find('#awards')).to have_content("World's Most Average Dad")
+    end
+  end
+
   def visit_report_for(id)
     visit "/development.html?uri=https://scholars.duke.edu/individual/per#{id}"
   end
@@ -148,4 +161,5 @@ RSpec.describe 'Scholar Report', type: :feature, js: true do
     find('.datepicker-months .month', text: month).click
     find('.datepicker-days .day', text: day).click
   end
+
 end
