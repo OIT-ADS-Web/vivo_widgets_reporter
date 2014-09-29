@@ -98,5 +98,10 @@
     (get-and-set owner (base-field-url "publications") :publications)
     (get-and-set owner (base-field-url "artistic_works") :artisticWorks)
     (get-and-set owner (base-field-url "grants") :grants)
+    (get-and-set owner (base-field-url "awards") :awards)
+    (get-and-set owner (base-field-url "presentations") :presentations)
+    (get-and-set owner
+                 (base-field-url "professional_activities")
+                 :professionalActivities)
     )
   )
