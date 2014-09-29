@@ -31,6 +31,7 @@
 
 (defn generate-report [{:keys [
                                include-overview overview 
+                               include-mentorship mentorship 
                                include-positions positions
                                include-awards awards
                                include-geographicalFocus geographicalFocus
@@ -43,6 +44,7 @@
                                citation-format include-pub-links]}]
   (dom/div nil
     (if include-overview (dangerous-html-section "Overview" overview))
+    (if include-mentorship (dangerous-html-section "Mentorship Availability" mentorship))
     (if include-positions (list-section "Appointments" (map :label positions)))
     (if include-awards (list-section "Awards" (map #(award-listing %) awards)))
     (if include-geographicalFocus
@@ -122,6 +124,7 @@
        :heading "Scholar Report"
 
        :include-overview true
+       :include-mentorship true
        :include-positions true
        :include-awards true
        :include-geographicalFocus true
@@ -171,6 +174,7 @@
         (dom/div #js {:className "span12 well" :id "options"}
           (dom/form #js {:className "form-inline"}
             (include-checkbox owner state :include-overview "Overview")
+            (include-checkbox owner state :include-mentorship "Mentorship")
             (include-checkbox owner state :include-positions "Appointments")
             (include-checkbox owner state :include-awards "Awards")
             (include-checkbox owner state :include-geographicalFocus "Geographical Focus")

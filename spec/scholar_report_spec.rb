@@ -19,6 +19,7 @@ RSpec.describe 'Scholar Report', type: :feature, js: true do
     it "turns empty sections off" do
       expect(find('#include-positions')).to be_checked
       expect(find('#include-overview')).not_to be_checked
+      expect(find('#include-mentorship')).not_to be_checked
       expect(find('#include-awards')).not_to be_checked
       expect(find('#include-geographicalFocus')).not_to be_checked
       expect(find('#include-courses')).not_to be_checked
@@ -30,6 +31,7 @@ RSpec.describe 'Scholar Report', type: :feature, js: true do
 
       expect(find('#report')).to     have_selector('div#appointments')
       expect(find('#report')).not_to have_selector('div#overview')
+      expect(find('#report')).not_to have_selector('div#mentorship')
       expect(find('#report')).not_to have_selector('div#awards')
       expect(find('#report')).not_to have_selector('div#geographical-focus')
       expect(find('#report')).not_to have_selector('div#courses')
@@ -176,6 +178,18 @@ RSpec.describe 'Scholar Report', type: :feature, js: true do
       expect(find('#professional-activities')).to have_content("Outreach Event")
       expect(find('#professional-activities')).to have_content("Committee Service")
       expect(find('#professional-activities')).to have_content("Event Attendance")
+    end
+  end
+
+  context 'for person with mentorship availability and overview' do
+    let(:mentor) {'pmm21'}
+    before do
+      visit_report_for(mentor)
+    end
+
+    it 'displays mentorship section' do
+      expect(find('#mentorship-availability')).to have_content("I declare myself")
+      expect(find('#mentorship-availability')).to have_content("Available to mentor")
     end
   end
 
