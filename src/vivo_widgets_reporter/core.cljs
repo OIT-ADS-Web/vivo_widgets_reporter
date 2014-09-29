@@ -36,6 +36,7 @@
                                include-geographicalFocus geographicalFocus
                                include-courses courses
                                include-grants grants
+                               include-professionalActivities professionalActivities
                                include-presentations presentations
                                include-artisticWorks artisticWorks
                                include-publications publications
@@ -52,6 +53,9 @@
     (if include-courses (list-section "Courses" (map :label courses)))
     (if include-grants
       (list-section "Grants" (map #(grant-listing %) grants)))
+    (if include-professionalActivities
+      (list-section "Professional Activities"
+                    (map :label professionalActivities)))
     (if include-presentations (list-section "Presentations"
                                             (map :label presentations)))
     (if include-artisticWorks
@@ -126,6 +130,7 @@
        :include-courses true
        :include-grants true
        :include-presentations true
+       :include-professionalActivities true
 
        :citation-format "chicagoCitation"
        :include-pub-links false
@@ -171,6 +176,7 @@
             (include-checkbox owner state :include-geographicalFocus "Geographical Focus")
             (include-checkbox owner state :include-courses "Courses")
             (include-checkbox owner state :include-grants "Grants")
+            (include-checkbox owner state :include-professionalActivities "Professional Activities")
             (include-checkbox owner state :include-presentations "Presentations")
             (include-checkbox owner state :include-artisticWorks "Artistic Works")
             (include-checkbox owner state :include-publications "Publications")

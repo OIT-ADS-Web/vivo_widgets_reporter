@@ -69,7 +69,8 @@
   (let [json-in-clojure (js->clj json :keywordize-keys true)]
     (dorun (map #(handle-new-field-data owner % (% json-in-clojure))
                 [:positions :geographicalFocus :awards :courses :grants
-                 :presentations :publications :artisticWorks])
+                 :presentations :professionalActivities :publications
+                 :artisticWorks])
            )
     (set-overview (:attributes json-in-clojure) owner)
     )
