@@ -58,13 +58,16 @@
   )
 
 (defn create-mentorship [{:keys [mentorshipOverview mentorshipAvailabilities]}]
-  (str mentorshipOverview
-       (when mentorshipAvailabilities
-         (str "<br><br>Available to mentor: " mentorshipAvailabilities))))
+  (if (and (string/blank? mentorshipOverview) (string/blank? mentorshipAvailabilities))
+    nil
+    (str mentorshipOverview
+         (when mentorshipAvailabilities
+           (str "<br><br>Available to mentor: " mentorshipAvailabilities))))
+    )
 
 (defn set-overview [json owner]
   (handle-new-field-data owner :overview (:overview json))
-  (om/set-state! owner :mentorship (create-mentorship json))
+  (handle-new-field-data owner :mentorship (create-mentorship json))
   (om/set-state! owner :heading (create-heading json))
   (om/set-state! owner :subheading (create-subheading json))
   (when-let [format (:preferredCitationFormat json)]
