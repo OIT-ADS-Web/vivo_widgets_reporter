@@ -167,6 +167,11 @@ RSpec.describe 'Scholar Report', type: :feature, js: true do
       expect(find('#professional-activities')).to have_content("Event Attendance")
       expect(find('#professional-activities')).to have_content("Interview about stuff")
     end
+
+    it 'displays activity sections in alphabetical order' do
+      expect(page.body).to match(
+        /h3.*Outreach.*h3.*h3.*Presentations.*h3.*h3.*Service to Duke University.*h3.*h3.*Service to the Profession.*h3/)
+    end
   end
 
   context 'for person with mentorship availability and overview' do

@@ -8,6 +8,7 @@
             [vivo_widgets_reporter.citations :refer [pub-citations
                                                      grant-listing
                                                      award-listing
+                                                     activity-list
                                                      art-citations]]
             ))
 
@@ -55,8 +56,8 @@
     (if include-grants
       (list-section "Grants" (map #(grant-listing %) grants)))
     (if include-professionalActivities
-      (list-section "Professional Activities"
-                    (map :label professionalActivities)))
+      (report-section "Professional Activities"
+                    (activity-list professionalActivities)))
     (if include-artisticWorks
       (report-section "Artistic Works" (art-citations artisticWorks)))
     (if include-publications

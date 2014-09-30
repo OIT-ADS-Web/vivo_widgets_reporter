@@ -87,6 +87,10 @@
     (re-matches #".*RadioTelevisionProgram" vivoType) "Radio / Television"
     (re-matches #".*Script" vivoType) "Scripts"
     (re-matches #".*VideoRecording" vivoType) "Video"
+    (re-matches #".*Outreach" vivoType) "Outreach"
+    (re-matches #".*Presentation" vivoType) "Presentations"
+    (re-matches #".*ServiceToTheProfession" vivoType) "Service to the Profession"
+    (re-matches #".*ServiceToTheUniversity" vivoType) "Service to Duke University"
     (re-matches #".*duke-art-extension.*" vivoType)
     (get-in data [:attributes :type_description])
     :else "Other"
@@ -117,6 +121,9 @@
 
 (defn art-citations [art-data]
   (citations art-data art-work-citation))
+
+(defn activity-list [activity-data]
+  (citations activity-data #(:label %)))
 
 (defn grant-listing [{label :label {:keys [startDate endDate awardedBy
                                            administeredBy]} :attributes :as data}]
