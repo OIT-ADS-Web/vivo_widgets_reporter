@@ -103,7 +103,7 @@
 (defn hash->sorted [hmap]
   (apply sorted-map (apply concat hmap)))
 
-(defn citations [data cite-fn]
+(defn collated [data cite-fn]
   (if (unavailable? (first data))
     "No data available."
     (let [sorted-data (hash->sorted (group-by #(type->header (:vivoType %) %)
@@ -117,13 +117,13 @@
       )))
 
 (defn pub-citations [pub-data citation-format link-pref]
-  (citations pub-data #(pub-citation % citation-format link-pref)))
+  (collated pub-data #(pub-citation % citation-format link-pref)))
 
 (defn art-citations [art-data]
-  (citations art-data art-work-citation))
+  (collated art-data art-work-citation))
 
 (defn activity-list [activity-data]
-  (citations activity-data #(:label %)))
+  (collated activity-data #(:label %)))
 
 (defn grant-listing [{label :label {:keys [startDate endDate awardedBy
                                            administeredBy]} :attributes :as data}]
