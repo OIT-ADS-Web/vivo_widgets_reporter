@@ -78,7 +78,7 @@
   (let [json-in-clojure (js->clj json :keywordize-keys true)]
     (dorun (map #(handle-new-field-data owner % (% json-in-clojure))
                 [:positions :geographicalFocus :awards :courses :grants
-                 :presentations :professionalActivities :publications
+                 :professionalActivities :publications
                  :artisticWorks])
            )
     (set-overview (:attributes json-in-clojure) owner)
@@ -108,7 +108,6 @@
     (get-and-set owner (base-field-url "artistic_works") :artisticWorks)
     (get-and-set owner (base-field-url "grants") :grants)
     (get-and-set owner (base-field-url "awards") :awards)
-    (get-and-set owner (base-field-url "presentations") :presentations)
     (get-and-set owner
                  (base-field-url "professional_activities")
                  :professionalActivities)

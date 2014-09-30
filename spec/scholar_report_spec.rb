@@ -25,7 +25,6 @@ RSpec.describe 'Scholar Report', type: :feature, js: true do
       expect(find('#include-courses')).not_to be_checked
       expect(find('#include-grants')).not_to be_checked
       expect(find('#include-professionalActivities')).not_to be_checked
-      expect(find('#include-presentations')).not_to be_checked
       expect(find('#include-artisticWorks')).not_to be_checked
       expect(find('#include-publications')).not_to be_checked
 
@@ -37,7 +36,6 @@ RSpec.describe 'Scholar Report', type: :feature, js: true do
       expect(find('#report')).not_to have_selector('div#courses')
       expect(find('#report')).not_to have_selector('div#grants')
       expect(find('#report')).not_to have_selector('div#professionalActivities')
-      expect(find('#report')).not_to have_selector('div#presentations')
       expect(find('#report')).not_to have_selector('div#artistic-works')
       expect(find('#report')).not_to have_selector('div#publications')
     end
@@ -156,17 +154,6 @@ RSpec.describe 'Scholar Report', type: :feature, js: true do
     end
   end
 
-  context 'for person with one presentation' do
-    let(:occasional_presenter) {'pmm21'}
-    before do
-      visit_report_for(occasional_presenter)
-    end
-
-    it 'displays presentation section' do
-      expect(find('#presentations')).to have_content("Interview about stuff")
-    end
-  end
-
   context 'for person with some professional activities' do
     let(:professional_actor) {'pmm21'}
     before do
@@ -178,6 +165,7 @@ RSpec.describe 'Scholar Report', type: :feature, js: true do
       expect(find('#professional-activities')).to have_content("Outreach Event")
       expect(find('#professional-activities')).to have_content("Committee Service")
       expect(find('#professional-activities')).to have_content("Event Attendance")
+      expect(find('#professional-activities')).to have_content("Interview about stuff")
     end
   end
 
