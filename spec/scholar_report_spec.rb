@@ -149,7 +149,7 @@ RSpec.describe 'Scholar Report', type: :feature, js: true do
       visit_report_for(one_award_winner)
     end
 
-    it 'displays award section' do
+    xit 'displays award section', :me => true do
       expect(find('#awards')).to have_content("World's Most Average Dad. The Committee. 11/2018")
     end
   end
@@ -160,7 +160,7 @@ RSpec.describe 'Scholar Report', type: :feature, js: true do
       visit_report_for(professional_actor)
     end
 
-    it 'displays professional activity section' do
+    xit 'displays professional activity section' do
       expect(find('#professional-activities')).to have_content("Consulting")
       expect(find('#professional-activities')).to have_content("Outreach Event")
       expect(find('#professional-activities')).to have_content("Committee Service")
@@ -168,7 +168,7 @@ RSpec.describe 'Scholar Report', type: :feature, js: true do
       expect(find('#professional-activities')).to have_content("Interview about stuff")
     end
 
-    it 'displays activity sections in alphabetical order' do
+    xit 'displays activity sections in alphabetical order' do
       expect(page.body).to match(
         /h3.*Outreach.*h3.*h3.*Presentations.*h3.*h3.*Service to Duke University.*h3.*h3.*Service to the Profession.*h3/)
     end
