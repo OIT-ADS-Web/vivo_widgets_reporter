@@ -6,13 +6,13 @@ deploy_dir="/srv/web/apps/vivo_widgets_reporter"
 
 case "$ENVIRONMENT" in
   development)
-    SERVERS=("scholars-web-dev-01.oit.duke.local")
+    SERVERS=("scholars-web-dev-02.oit.duke.edu")
     ;;
   acceptance)
-    SERVERS=("scholars-web-test-01.oit.duke.local" "scholars-web-test-02.oit.duke.local")
+    SERVERS=("scholars-web-test-04.oit.duke.edu" "scholars-web-test-05.oit.duke.edu")
     ;;
   production)
-    SERVERS=("scholars-web-01.oit.duke.local" "scholars-web-02.oit.duke.local")
+    SERVERS=("scholars-web-04.oit.duke.edu" "scholars-web-05.oit.duke.edu")
     ;;
   *)
     echo "Usage: $0 {development|acceptance|production}"
@@ -25,12 +25,12 @@ for SERVER in "${SERVERS[@]}"; do
   echo "deploying to $ENVIRONMENT server: $SERVER..."
 
   echo "rsyncing files to $SERVER..."
-  rsync -avz production.html torquebox@$SERVER:$deploy_dir/scholar_report.html
+  rsync -avz production.html tomcat@$SERVER:$deploy_dir/scholar_report.html
 
   echo "creating asset directory on $SERVER..."
-  ssh torquebox@$SERVER "[ -d $deploy_dir/assets ] || mkdir $deploy_dir/assets"
+  ssh tomcat@$SERVER "[ -d $deploy_dir/assets ] || mkdir $deploy_dir/assets"
 
   echo "rsyncing asset files to $SERVER..."
-  rsync -avz assets/css/*.css torquebox@$SERVER:$deploy_dir/assets/css/
-  rsync -avz assets/js/*.js torquebox@$SERVER:$deploy_dir/assets/js/
+  rsync -avz assets/css/*.css tomcat@$SERVER:$deploy_dir/assets/css/
+  rsync -avz assets/js/*.js tomcat@$SERVER:$deploy_dir/assets/js/
 done
