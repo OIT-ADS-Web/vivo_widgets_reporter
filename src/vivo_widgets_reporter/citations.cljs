@@ -47,12 +47,12 @@
 
 (defn extract-precise-date [{{:keys [date datePrecision date_precision]} :attributes}]
   (cond
-    (re-find #"yearPrecision" date_precision)         (extract-year date)
-    (re-find #"yearMonthPrecision" date_precision)    (extract-month-year date)
-    (re-find #"yearMonthDayPrecision" date_precision) (extract-month-day-year date)
-    (re-find #"yearPrecision" datePrecision)         (extract-year date)
-    (re-find #"yearMonthPrecision" datePrecision)    (extract-month-year date)
-    (re-find #"yearMonthDayPrecision" datePrecision) (extract-month-day-year date)
+    (re-find #"yearPrecision" (str date_precision ""))         (extract-year date)
+    (re-find #"yearMonthPrecision" (str date_precision ""))    (extract-month-year date)
+    (re-find #"yearMonthDayPrecision" (str date_precision "")) (extract-month-day-year date)
+    (re-find #"yearPrecision" (str datePrecision ""))          (extract-year date)
+    (re-find #"yearMonthPrecision" (str datePrecision ""))     (extract-month-year date)
+    (re-find #"yearMonthDayPrecision" (str datePrecision ""))  (extract-month-day-year date)
     :else (extract-year date)
     )
   )
