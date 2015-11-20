@@ -105,19 +105,19 @@ RSpec.describe 'Scholar Report', type: :feature, js: true do
 
     it 'allows user to choose different citation formats' do
       expect(find('#publications')).to have_text(
-"Lyerly, AD; Namey, EE; Gray, B; Swamy, G; Faden, RR. \"Women's views about participating in research while pregnant.\" IRB Ethics and Human Research 34, no. 4 (2012): 1-8.")
+"Lyerly, AD, Namey, EE, Gray, B, Swamy, G, and Faden, RR. \"Women's views about participating in research while pregnant.\" IRB Ethics and Human Research 34, no. 4 (2012): 1-8.")
 
       select('MLA', from: 'citation-format-preference')
       expect(find('#publications')).to have_text(
-        "Lyerly, AD; Namey, EE; Gray, B; Swamy, G; Faden, RR. \"Women's views about participating in research while pregnant.\" IRB Ethics and Human Research 34.4 (2012): 1-8.")
+        "Lyerly, AD, Namey, EE, Gray, B, Swamy, G, and Faden, RR. \"Women's views about participating in research while pregnant.\" IRB Ethics and Human Research 34.4 (2012): 1-8.")
 
       select('APA', from: 'citation-format-preference')
       expect(find('#publications')).to have_text(
-        "Lyerly, AD; Namey, EE; Gray, B; Swamy, G; Faden, RR. (2012). Women's views about participating in research while pregnant. IRB Ethics and Human Research, 34(4), 1-8.")
+        "Lyerly, AD, Namey, EE, Gray, B, Swamy, G, & Faden, RR. (2012). Women's views about participating in research while pregnant. IRB Ethics and Human Research, 34(4), 1-8.")
 
       select('ICMJE', from: 'citation-format-preference')
       expect(find('#publications')).to have_text(
-        "Lyerly, AD; Namey, EE; Gray, B; Swamy, G; Faden, RR. Women's views about participating in research while pregnant. IRB Ethics and Human Research. 2012;34(4):1-8.")
+        "Lyerly AD, Namey EE, Gray B, Swamy G, Faden RR. Women's views about participating in research while pregnant. IRB Ethics and Human Research. 2012;34(4):1-8.")
     end
 
     it "lets user add links back into pub" do

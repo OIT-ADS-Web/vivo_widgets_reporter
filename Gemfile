@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem 'capybara'
-gem 'selenium-webdriver', '~> 2.45.0'
+gem 'capybara', '~> 2.5.0'
+gem 'selenium-webdriver', '~> 2.48.0'
 gem 'rack'
 gem 'rspec'
