@@ -17,7 +17,7 @@
 (def app-state (atom {}))
 
 (defn report-section [title content]
-  (dom/div #js {:id (string/replace (string/lower-case title) #"\s" "-")} 
+  (dom/div #js {:id (string/replace (string/lower-case title) #"\s" "-")}
     (dom/h2 nil title)
     content
     ))
@@ -31,8 +31,8 @@
   (report-section title (dom-utils/unstyled-list items)))
 
 (defn generate-report [{:keys [
-                               include-overview overview 
-                               include-mentorship mentorship 
+                               include-overview overview
+                               include-mentorship mentorship
                                include-positions positions
                                include-awards awards
                                include-geographicalFocus geographicalFocus
@@ -86,6 +86,10 @@
 (defn requested-uri []
   (string/replace (str (.. js/document -location -search)) #"\?uri=" ""))
 
+(defn new-uri [url]
+  (string/join ""["https://scholars.duke.edu/vivo_admin/people?uri=https://scholars.duke.edu/individual/" (last(string/split url #"/"))])
+)
+
 (defn include-checkbox [owner state preference label]
   (dom/label #js {:className "checkbox"}
     (dom/input
@@ -101,7 +105,7 @@
     (dom/div #js {:className "controls"}
       (dom/input #js {:type "text" :placeholder "YYYY-MM-DD"
                       :className "datepicker"
-                      :id (name delimiter) 
+                      :id (name delimiter)
                       :value (delimiter state)
                       :onChange #(update-date-delimiter % owner delimiter)
                       })
@@ -142,6 +146,7 @@
       )
     om/IDidMount
     (did-mount [this]
+
       (.. (js/jQuery ".datepicker")
           (datepicker #js {:autoclose true
                            :startView "decade"
@@ -158,10 +163,10 @@
       (dom/div nil
         (dom/ul #js {:className "span12 breadcrumb"}
           (dom/li nil
-            (dom/a #js {:href "https://scholars.duke.edu/vivo_admin/"}
+            (dom/a #js {:href (new-uri(requested-uri))}
                    "Back to Profile Manager Home")))
         (select/buttons "report")
-        (dom/h2 nil (:heading state) 
+        (dom/h2 nil (:heading state)
           (if-not (string/blank? (:start state))
                   (dom/span nil (str ", from " (:start state)) ))
           (if-not (string/blank? (:end state))
