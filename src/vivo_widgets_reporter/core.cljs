@@ -48,7 +48,7 @@
     (if include-positions (list-section "Appointments" (map :label positions)))
     (if include-awards (list-section "Awards" (map #(award-listing %) awards)))
     (if include-geographicalFocus
-      (list-section "Geographical Focus"
+      (list-section "Global Scholarship"
                     (map #(str (:label %) ", "
                                (get-in % [:attributes :focusTypeLabel]))
                          geographicalFocus)))
@@ -179,7 +179,7 @@
             (include-checkbox owner state :include-mentorship "Mentorship")
             (include-checkbox owner state :include-positions "Appointments")
             (include-checkbox owner state :include-awards "Awards")
-            (include-checkbox owner state :include-geographicalFocus "Geographical Focus")
+            (include-checkbox owner state :include-geographicalFocus "Global Scholarship")
             (include-checkbox owner state :include-courses "Courses")
             (include-checkbox owner state :include-grants "Grants")
             (include-checkbox owner state :include-professionalActivities "Professional Activities")
