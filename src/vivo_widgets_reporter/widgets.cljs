@@ -12,7 +12,7 @@
                 (= "127.0.0.1" doc-domain) ; testing
                 (= "localhost" doc-domain)) ; local dev server
       doc-domain
-      "scholars2-test.oit.duke.edu")
+      "scholars.duke.edu")
     )
   )
 
