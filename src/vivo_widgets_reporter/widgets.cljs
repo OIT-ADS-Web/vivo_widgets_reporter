@@ -70,6 +70,7 @@
   (handle-new-field-data owner :mentorship (create-mentorship json))
   (handle-new-field-data owner :leadershipPositions (:leadershipPositions json))
   (handle-new-field-data owner :interestsOverview (:interestsOverview json))
+  (handle-new-field-data owner :academicActivities (:academicActivities json))
   (om/set-state! owner :heading (create-heading json))
   (om/set-state! owner :subheading (create-subheading json))
   (when-let [format (:preferredCitationFormat json)]
