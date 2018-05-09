@@ -68,6 +68,7 @@
 (defn set-overview [json owner]
   (handle-new-field-data owner :overview (:overview json))
   (handle-new-field-data owner :mentorship (create-mentorship json))
+  (handle-new-field-data owner :interestsOverview (:interestsOverview json))
   (om/set-state! owner :heading (create-heading json))
   (om/set-state! owner :subheading (create-subheading json))
   (when-let [format (:preferredCitationFormat json)]
