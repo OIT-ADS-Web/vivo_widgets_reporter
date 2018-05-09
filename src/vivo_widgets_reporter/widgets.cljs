@@ -79,7 +79,7 @@
     (dorun (map #(handle-new-field-data owner % (% json-in-clojure))
                 [:positions :geographicalFocus :awards :courses :grants
                  :professionalActivities :publications
-                 :artisticWorks :licenses :pastAppointments])
+                 :artisticWorks :licenses :pastAppointments :academicPositions])
            )
     (set-overview (:attributes json-in-clojure) owner)
     )

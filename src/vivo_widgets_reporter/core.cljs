@@ -42,6 +42,7 @@
                                include-artisticWorks artisticWorks
                                include-licenses licenses
                                include-pastAppointments pastAppointments
+                               include-academicPositions academicPositions
                                include-publications publications
                                citation-format include-pub-links]}]
   (dom/div nil
@@ -64,6 +65,7 @@
       (report-section "Artistic Works" (art-citations artisticWorks)))
     (if include-licenses (list-section "Medical Licensure" (map :label licenses)))
     (if include-pastAppointments (list-section "Duke Appointment History" (map :label pastAppointments)))
+    (if include-academicPositions (list-section "Academic Positions Outside Duke" (map :label academicPositions)))
     (if include-publications
       (report-section "Publications" (pub-citations publications
                                                     citation-format
@@ -141,6 +143,7 @@
        :include-professionalActivities true
        :include-licenses true
        :include-pastAppointments true
+       :include-academicPositions true
 
        :citation-format "chicagoCitation"
        :include-pub-links false
@@ -192,6 +195,7 @@
             (include-checkbox owner state :include-artisticWorks "Artistic Works")
             (include-checkbox owner state :include-licenses "Medical Licensure")
             (include-checkbox owner state :include-pastAppointments "Duke Appointment History")
+            (include-checkbox owner state :include-academicPositions "Academic Positions Outside Duke")
             (include-checkbox owner state :include-publications "Publications")
             )
           (dom/form #js {:className "form-horizontal span6"}
