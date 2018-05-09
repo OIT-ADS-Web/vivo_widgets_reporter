@@ -9,7 +9,9 @@
                                                      grant-listing
                                                      award-listing
                                                      activity-list
-                                                     art-citations]]
+                                                     art-citations
+                                                     ;;past-listing
+                                                     ]]
             ))
 
 (enable-console-print!)
@@ -68,13 +70,15 @@
       (list-section "Grants" (map #(grant-listing %) grants)))
     (if include-professionalActivities
       (report-section "Professional Activities"
-                    (activity-list professionalActivities)))
+        (activity-list professionalActivities)))
     (if include-professionalActivities (dangerous-html-section "Academic & Administrative Activities" academicActivities))
     (if include-professionalActivities (dangerous-html-section "Clinical Activities" clinicalOverview))
     (if include-artisticWorks
       (report-section "Artistic Works" (art-citations artisticWorks)))
     (if include-licenses (list-section "Medical Licensure" (map :label licenses)))
     (if include-pastAppointments (list-section "Duke Appointment History" (map :label pastAppointments)))
+;;    (if include-pastAppointments
+;;      (list-section "Duke Appointment History" (map #(past-listing %) pastAppointments)))
     (if include-leadershipPositions (dangerous-html-section "Leadership & Clinical Positions" leadershipPositions))
     (if include-academicPositions (list-section "Academic Positions Outside Duke" (map :label academicPositions)))
     (if include-interestsOverview (dangerous-html-section "Current Research Interests" interestsOverview))

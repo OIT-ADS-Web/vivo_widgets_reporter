@@ -135,11 +135,18 @@
          ", " (extract-year startDate) "-" (extract-year endDate)
          )))
 
+;;(defn past-listing [{label :label {:keys [startYear endYear
+;;                                          organizationLabel]} :attributes :as data}]
+;;  (if (unavailable? data)
+;;    "No data available."
+;;    (str label
+;;      (if organizationLabel (str ", " organizationLabel))
+;;      ", " (extract-year startYear) "-" (extract-year endYear)
+;;      )))
+
 (defn award-listing [data]
   (if (unavailable? data)
     "No data available."
     (str (:label data) " "
-         (extract-precise-date data) "."
-         )
-    )
-  )
+         (extract-precise-date data) ".")))
+
