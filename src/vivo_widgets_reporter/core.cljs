@@ -40,6 +40,7 @@
                                include-grants grants
                                include-professionalActivities professionalActivities
                                include-artisticWorks artisticWorks
+                               include-licenses licenses
                                include-pastAppointments pastAppointments
                                include-publications publications
                                citation-format include-pub-links]}]
@@ -61,6 +62,7 @@
                     (activity-list professionalActivities)))
     (if include-artisticWorks
       (report-section "Artistic Works" (art-citations artisticWorks)))
+    (if include-licenses (list-section "Medical Licensure" (map :label licenses)))
     (if include-pastAppointments (list-section "Duke Appointment History" (map :label pastAppointments)))
     (if include-publications
       (report-section "Publications" (pub-citations publications
@@ -137,6 +139,7 @@
        :include-courses true
        :include-grants true
        :include-professionalActivities true
+       :include-licenses true
        :include-pastAppointments true
 
        :citation-format "chicagoCitation"
@@ -187,6 +190,7 @@
             (include-checkbox owner state :include-grants "Grants")
             (include-checkbox owner state :include-professionalActivities "Professional Activities")
             (include-checkbox owner state :include-artisticWorks "Artistic Works")
+            (include-checkbox owner state :include-licenses "Medical Licensure")
             (include-checkbox owner state :include-pastAppointments "Duke Appointment History")
             (include-checkbox owner state :include-publications "Publications")
             )
