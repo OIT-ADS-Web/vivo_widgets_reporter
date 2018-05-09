@@ -72,6 +72,7 @@
   (handle-new-field-data owner :interestsOverview (:interestsOverview json))
   (handle-new-field-data owner :teachingActivities (:teachingActivities json))
   (handle-new-field-data owner :academicActivities (:academicActivities json))
+  (handle-new-field-data owner :clinicalOverview (:clinicalOverview json))
   (om/set-state! owner :heading (create-heading json))
   (om/set-state! owner :subheading (create-subheading json))
   (when-let [format (:preferredCitationFormat json)]

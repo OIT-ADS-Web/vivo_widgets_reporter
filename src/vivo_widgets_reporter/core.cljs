@@ -50,6 +50,7 @@
                                include-teachingActivities teachingActivities
                                include-newsfeeds newsfeeds
                                include-academicActivities academicActivities
+                               include-clinicalOverview clinicalOverview
                                include-publications publications
                                citation-format include-pub-links]}]
   (dom/div nil
@@ -80,6 +81,7 @@
     (if include-teachingActivities (dangerous-html-section "Teaching Activities" teachingActivities))
     (if include-newsfeeds (list-section "In the News" (map :label newsfeeds)))
     (if include-academicActivities (dangerous-html-section "Academic & Administrative Activities" academicActivities))
+    (if include-clinicalOverview (dangerous-html-section "Clinical Activities" clinicalOverview))
     (if include-publications
       (report-section "Publications" (pub-citations publications
                                                     citation-format
@@ -165,6 +167,7 @@
        :include-teachingActivities true
        :include-newsfeeds true
        :include-academicActivities true
+       :include-clinicalOverview true
 
        :citation-format "chicagoCitation"
        :include-pub-links false
@@ -224,6 +227,7 @@
             (include-checkbox owner state :include-teachingActivities "Teaching Activities")
             (include-checkbox owner state :include-newsfeeds "In the News")
             (include-checkbox owner state :include-academicActivities "Academic & Administrative Activities")
+            (include-checkbox owner state :include-clinicalOverview "Clinical Activities")
             (include-checkbox owner state :include-publications "Publications")
             )
           (dom/form #js {:className "form-horizontal span6"}
