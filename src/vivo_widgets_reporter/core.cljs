@@ -48,6 +48,7 @@
                                include-gifts gifts
                                include-artisticEvents artisticEvents
                                include-academicActivities academicActivities
+                               include-newsfeeds newsfeeds
                                include-publications publications
                                citation-format include-pub-links]}]
   (dom/div nil
@@ -76,6 +77,7 @@
     (if include-gifts (list-section "Fellowships, Supported Research, & Other Grants" (map :label gifts)))
     (if include-artisticEvents (list-section "Exhibitions, Screenings, & Performances" (map :label artisticEvents)))
     (if include-academicActivities (dangerous-html-section "Teaching Activities" academicActivities))
+    (if include-newsfeeds (list-section "In the News" (map :label newsfeeds)))
     (if include-publications
       (report-section "Publications" (pub-citations publications
                                                     citation-format
@@ -159,6 +161,7 @@
        :include-gifts true
        :include-artisticEvents true
        :include-academicActivities true
+       :include-newsfeeds true
 
        :citation-format "chicagoCitation"
        :include-pub-links false
@@ -216,6 +219,7 @@
             (include-checkbox owner state :include-gifts "Fellowships, Supported Research, & Other Grants")
             (include-checkbox owner state :include-artisticEvents "Exhibitions, Screenings, & Performances")
             (include-checkbox owner state :include-academicActivities "Teaching Activities")
+            (include-checkbox owner state :include-newsfeeds "In the News")
             (include-checkbox owner state :include-publications "Publications")
             )
           (dom/form #js {:className "form-horizontal span6"}
