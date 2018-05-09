@@ -47,8 +47,9 @@
                                include-interestsOverview interestsOverview
                                include-gifts gifts
                                include-artisticEvents artisticEvents
-                               include-academicActivities academicActivities
+                               include-teachingActivities teachingActivities
                                include-newsfeeds newsfeeds
+                               include-academicActivities academicActivities
                                include-publications publications
                                citation-format include-pub-links]}]
   (dom/div nil
@@ -76,8 +77,9 @@
     (if include-interestsOverview (dangerous-html-section "Current Research Interests" interestsOverview))
     (if include-gifts (list-section "Fellowships, Supported Research, & Other Grants" (map :label gifts)))
     (if include-artisticEvents (list-section "Exhibitions, Screenings, & Performances" (map :label artisticEvents)))
-    (if include-academicActivities (dangerous-html-section "Teaching Activities" academicActivities))
+    (if include-teachingActivities (dangerous-html-section "Teaching Activities" teachingActivities))
     (if include-newsfeeds (list-section "In the News" (map :label newsfeeds)))
+    (if include-academicActivities (dangerous-html-section "Academic & Administrative Activities" academicActivities))
     (if include-publications
       (report-section "Publications" (pub-citations publications
                                                     citation-format
@@ -160,8 +162,9 @@
        :include-interestsOverview true
        :include-gifts true
        :include-artisticEvents true
-       :include-academicActivities true
+       :include-teachingActivities true
        :include-newsfeeds true
+       :include-academicActivities true
 
        :citation-format "chicagoCitation"
        :include-pub-links false
@@ -218,8 +221,9 @@
             (include-checkbox owner state :include-interestsOverview "Current Research Interests")
             (include-checkbox owner state :include-gifts "Fellowships, Supported Research, & Other Grants")
             (include-checkbox owner state :include-artisticEvents "Exhibitions, Screenings, & Performances")
-            (include-checkbox owner state :include-academicActivities "Teaching Activities")
+            (include-checkbox owner state :include-teachingActivities "Teaching Activities")
             (include-checkbox owner state :include-newsfeeds "In the News")
+            (include-checkbox owner state :include-academicActivities "Academic & Administrative Activities")
             (include-checkbox owner state :include-publications "Publications")
             )
           (dom/form #js {:className "form-horizontal span6"}
