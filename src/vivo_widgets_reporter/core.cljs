@@ -69,6 +69,8 @@
     (if include-professionalActivities
       (report-section "Professional Activities"
                     (activity-list professionalActivities)))
+    (if include-professionalActivities (dangerous-html-section "Academic & Administrative Activities" academicActivities))
+    (if include-professionalActivities (dangerous-html-section "Clinical Activities" clinicalOverview))
     (if include-artisticWorks
       (report-section "Artistic Works" (art-citations artisticWorks)))
     (if include-licenses (list-section "Medical Licensure" (map :label licenses)))
@@ -80,8 +82,8 @@
     (if include-artisticEvents (list-section "Exhibitions, Screenings, & Performances" (map :label artisticEvents)))
     (if include-teachingActivities (dangerous-html-section "Teaching Activities" teachingActivities))
     (if include-newsfeeds (list-section "In the News" (map :label newsfeeds)))
-    (if include-academicActivities (dangerous-html-section "Academic & Administrative Activities" academicActivities))
-    (if include-clinicalOverview (dangerous-html-section "Clinical Activities" clinicalOverview))
+;;    (if include-academicActivities (dangerous-html-section "Academic & Administrative Activities" academicActivities))
+;;    (if include-clinicalOverview (dangerous-html-section "Clinical Activities" clinicalOverview))
     (if include-publications
       (report-section "Publications" (pub-citations publications
                                                     citation-format
@@ -226,8 +228,8 @@
             (include-checkbox owner state :include-artisticEvents "Exhibitions, Screenings, & Performances")
             (include-checkbox owner state :include-teachingActivities "Teaching Activities")
             (include-checkbox owner state :include-newsfeeds "In the News")
-            (include-checkbox owner state :include-academicActivities "Academic & Administrative Activities")
-            (include-checkbox owner state :include-clinicalOverview "Clinical Activities")
+;;            (include-checkbox owner state :include-academicActivities "Academic & Administrative Activities")
+;;            (include-checkbox owner state :include-clinicalOverview "Clinical Activities")
             (include-checkbox owner state :include-publications "Publications")
             )
           (dom/form #js {:className "form-horizontal span6"}
