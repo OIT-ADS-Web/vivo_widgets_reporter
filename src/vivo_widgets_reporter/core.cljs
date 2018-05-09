@@ -45,6 +45,7 @@
                                include-leadershipPositions leadershipPositions
                                include-academicPositions academicPositions
                                include-interestsOverview interestsOverview
+                               include-gifts gifts
                                include-publications publications
                                citation-format include-pub-links]}]
   (dom/div nil
@@ -70,6 +71,7 @@
     (if include-leadershipPositions (dangerous-html-section "Leadership & Clinical Positions" leadershipPositions))
     (if include-academicPositions (list-section "Academic Positions Outside Duke" (map :label academicPositions)))
     (if include-interestsOverview (dangerous-html-section "Current Research Interests" interestsOverview))
+    (if include-gifts (list-section "Fellowships, Supported Research, & Other Grants" (map :label gifts)))
     (if include-publications
       (report-section "Publications" (pub-citations publications
                                                     citation-format
@@ -150,6 +152,7 @@
        :include-leadershipPositions true
        :include-academicPositions true
        :include-interestsOverview true
+       :include-gifts true
 
        :citation-format "chicagoCitation"
        :include-pub-links false
@@ -204,6 +207,7 @@
             (include-checkbox owner state :include-leadershipPositions "Leadership & Clinical Positions")
             (include-checkbox owner state :include-academicPositions "Academic Positions Outside Duke")
             (include-checkbox owner state :include-interestsOverview "Current Research Interests")
+            (include-checkbox owner state :include-gifts "Fellowships, Supported Research, & Other Grants")
             (include-checkbox owner state :include-publications "Publications")
             )
           (dom/form #js {:className "form-horizontal span6"}
