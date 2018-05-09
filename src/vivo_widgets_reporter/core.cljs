@@ -42,6 +42,7 @@
                                include-artisticWorks artisticWorks
                                include-licenses licenses
                                include-pastAppointments pastAppointments
+                               include-leadershipPositions leadershipPositions
                                include-academicPositions academicPositions
                                include-interestsOverview interestsOverview
                                include-publications publications
@@ -66,6 +67,7 @@
       (report-section "Artistic Works" (art-citations artisticWorks)))
     (if include-licenses (list-section "Medical Licensure" (map :label licenses)))
     (if include-pastAppointments (list-section "Duke Appointment History" (map :label pastAppointments)))
+    (if include-leadershipPositions (dangerous-html-section "Leadership & Clinical Positions" leadershipPositions))
     (if include-academicPositions (list-section "Academic Positions Outside Duke" (map :label academicPositions)))
     (if include-interestsOverview (dangerous-html-section "Current Research Interests" interestsOverview))
     (if include-publications
@@ -145,6 +147,7 @@
        :include-professionalActivities true
        :include-licenses true
        :include-pastAppointments true
+       :include-leadershipPositions true
        :include-academicPositions true
        :include-interestsOverview true
 
@@ -198,6 +201,7 @@
             (include-checkbox owner state :include-artisticWorks "Artistic Works")
             (include-checkbox owner state :include-licenses "Medical Licensure")
             (include-checkbox owner state :include-pastAppointments "Duke Appointment History")
+            (include-checkbox owner state :include-leadershipPositions "Leadership & Clinical Positions")
             (include-checkbox owner state :include-academicPositions "Academic Positions Outside Duke")
             (include-checkbox owner state :include-interestsOverview "Current Research Interests")
             (include-checkbox owner state :include-publications "Publications")
