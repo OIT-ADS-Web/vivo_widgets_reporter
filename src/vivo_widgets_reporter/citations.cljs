@@ -148,8 +148,7 @@
   (if (unavailable? data)
     "No data available."
     (str label
-      (if organizationLabel (str ", " organizationLabel))
-      ", " (extract-year startYear) "-" (extract-year endYear)
+      (str) ", " (extract-year startYear) "-" (extract-year endYear)
       )))
 
 (defn award-listing [data]
