@@ -7,6 +7,7 @@
             [vivo_widgets_reporter.select :as select]
             [vivo_widgets_reporter.citations :refer [pub-citations
                                                      grant-listing
+                                                     newsfeed-listing
                                                      award-listing
                                                      activity-list
                                                      art-citations
@@ -85,7 +86,9 @@
     (if include-gifts (list-section "Fellowships, Supported Research, & Other Grants" (map :label gifts)))
     (if include-artisticEvents (list-section "Exhibitions, Screenings, & Performances" (map :label artisticEvents)))
     (if include-teachingActivities (dangerous-html-section "Teaching Activities" teachingActivities))
-    (if include-newsfeeds (list-section "In the News" (map :label newsfeeds)))
+;;    (if include-newsfeeds (list-section "In the News" (map :label newsfeeds)))
+    (if include-newsfeeds
+      (list-section "In the News" (map #(newsfeed-listing %) newsfeeds)))
 ;;    (if include-academicActivities (dangerous-html-section "Academic & Administrative Activities" academicActivities))
 ;;    (if include-clinicalOverview (dangerous-html-section "Clinical Activities" clinicalOverview))
     (if include-publications

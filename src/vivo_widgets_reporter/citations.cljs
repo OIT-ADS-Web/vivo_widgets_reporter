@@ -135,14 +135,22 @@
          ", " (extract-year startDate) "-" (extract-year endDate)
          )))
 
-;;(defn past-listing [{label :label {:keys [startYear endYear
-;;                                          organizationLabel]} :attributes :as data}]
-;;  (if (unavailable? data)
-;;    "No data available."
-;;    (str label
-;;      (if organizationLabel (str ", " organizationLabel))
-;;      ", " (extract-year startYear) "-" (extract-year endYear)
-;;      )))
+(defn newsfeed-listing [{label :label {:keys [newsYear newsSource]} :attributes :as data}]
+  (if (unavailable? data)
+    "No data available."
+    (str label ". "
+       (if newsSource (str newsSource)) 
+       (if newsYear (str ". " newsYear "."))
+        )))
+
+(defn past-listing [{label :label {:keys [startYear endYear
+                                          organizationLabel]} :attributes :as data}]
+  (if (unavailable? data)
+    "No data available."
+    (str label
+      (if organizationLabel (str ", " organizationLabel))
+      ", " (extract-year startYear) "-" (extract-year endYear)
+      )))
 
 (defn award-listing [data]
   (if (unavailable? data)

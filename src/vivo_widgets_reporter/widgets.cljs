@@ -112,7 +112,7 @@
     (get-and-set owner (base-field-url "publications") :publications)
     (get-and-set owner (base-field-url "artistic_works") :artisticWorks)
     (get-and-set owner (base-field-url "grants") :grants)
-    ;;(get-and-set owner (base-field-url "past_apt") :pastAppointments)
+    (get-and-set owner (base-field-url "newsfeeds") :newsfeeds)
     (get-and-set owner (base-field-url "awards") :awards)
     (get-and-set owner
                  (base-field-url "professional_activities")
