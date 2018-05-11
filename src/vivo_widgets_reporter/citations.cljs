@@ -158,6 +158,13 @@
       (str ". ") (extract-year startDate) "-" (extract-year endDate)
       )))
 
+(defn gift-listing [{label :label {:keys [dateTimeStart dateTimeEnd donor]} :attributes :as data}]
+  (if (unavailable? data)
+    "No data available."
+    (str label
+      (str " awarded by " donor ". ") (extract-year dateTimeStart) "-" (extract-year dateTimeEnd)
+      )))
+
 (defn award-listing [data]
   (if (unavailable? data)
     "No data available."

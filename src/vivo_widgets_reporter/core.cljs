@@ -13,6 +13,7 @@
                                                      art-citations
                                                      past-listing
                                                      academic-listing
+                                                     gift-listing
                                                      ]]
             ))
 
@@ -84,7 +85,8 @@
     (if include-academicPositions
       (list-section "Academic Positions Outside Duke" (map #(academic-listing %) academicPositions)))
     (if include-interestsOverview (dangerous-html-section "Current Research Interests" interestsOverview))
-    (if include-gifts (list-section "Fellowships, Supported Research, & Other Grants" (map :label gifts)))
+    (if include-gifts
+      (list-section "Fellowships, Supported Research, & Other Grants" (map #(gift-listing %) gifts)))
     (if include-artisticEvents (list-section "Exhibitions, Screenings, & Performances" (map :label artisticEvents)))
     (if include-teachingActivities (dangerous-html-section "Teaching Activities" teachingActivities))
     (if include-newsfeeds
