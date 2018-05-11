@@ -138,9 +138,8 @@
 (defn newsfeed-listing [{label :label {:keys [newsYear newsSource]} :attributes :as data}]
   (if (unavailable? data)
     "No data available."
-    (str label ". "
+    (str label ". " newsYear ". "
        (if newsSource (str newsSource)) 
-       (if newsYear (str ". " newsYear "."))
         )))
 
 (defn past-listing [{label :label {:keys [startYear endYear
