@@ -14,6 +14,7 @@
                                                      past-listing
                                                      academic-listing
                                                      gift-listing
+                                                     art-event-listing
                                                      ]]
             ))
 
@@ -87,7 +88,8 @@
     (if include-interestsOverview (dangerous-html-section "Current Research Interests" interestsOverview))
     (if include-gifts
       (list-section "Fellowships, Supported Research, & Other Grants" (map #(gift-listing %) gifts)))
-    (if include-artisticEvents (list-section "Exhibitions, Screenings, & Performances" (map :label artisticEvents)))
+    (if include-artisticEvents
+      (list-section "Exhibitions, Screenings, & Performances" (map #(art-event-listing %) artisticEvents)))
     (if include-teachingActivities (dangerous-html-section "Teaching Activities" teachingActivities))
     (if include-newsfeeds
       (list-section "In the News" (map #(newsfeed-listing %) newsfeeds)))

@@ -165,6 +165,14 @@
       (str " awarded by " donor ". ") (extract-year dateTimeStart) "-" (extract-year dateTimeEnd)
       )))
 
+(defn art-event-listing [{label :label {:keys [venue startYear endYear]} :attributes :as data}]
+  (if (unavailable? data)
+    "No data available."
+    (str label
+      (str " at " venue ". ") (extract-month-day-year startYear) 
+      (if endYear (str " - " (extract-month-day-year endYear))) "."
+      )))
+
 (defn award-listing [data]
   (if (unavailable? data)
     "No data available."
