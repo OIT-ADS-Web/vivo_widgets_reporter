@@ -14,9 +14,7 @@
                                                      past-listing
                                                      academic-listing
                                                      gift-listing
-                                                     art-event-listing
-                                                     ]]
-            ))
+                                                     art-event-listing]]))
 
 (enable-console-print!)
 
@@ -30,6 +28,17 @@
 
 (defn dangerous-html-section [title item]
   (report-section title
+                  (dom/div (clj->js {:dangerouslySetInnerHTML {:__html item}}))
+                  ))
+
+(defn small-report-section [title content]
+  (dom/div #js {:id (string/replace (string/lower-case title) #"\s" "-")}
+    (dom/h3 nil title)
+    content
+    ))
+
+(defn small-dangerous-html-section [title item]
+  (small-report-section title
                   (dom/div (clj->js {:dangerouslySetInnerHTML {:__html item}}))
                   ))
 
@@ -75,8 +84,9 @@
     (if include-professionalActivities
       (report-section "Professional Activities"
         (activity-list professionalActivities)))
-    (if include-professionalActivities (dangerous-html-section "Academic & Administrative Activities" academicActivities))
-    (if include-professionalActivities (dangerous-html-section "Clinical Activities" clinicalOverview))
+    (if include-professionalActivities (small-dangerous-html-section "Academic & Administrative Activities" academicActivities))
+    (if include-professionalActivities (small-dangerous-html-section "Clinical Activities" clinicalOverview))
+
     (if include-artisticWorks
       (report-section "Artistic Works" (art-citations artisticWorks)))
     (if include-licenses (list-section "Medical Licensure" (map :label licenses)))
@@ -169,6 +179,8 @@
        :include-grants true
        :include-professionalActivities true
 
+       :include-academicActivities true
+       :include-clinicalOverview true
        :include-licenses true
        :include-pastAppointments true
        :include-leadershipPositions true
@@ -178,8 +190,6 @@
        :include-artisticEvents true
        :include-teachingActivities true
        :include-newsfeeds true
-       :include-academicActivities true
-       :include-clinicalOverview true
 
        :citation-format "chicagoCitation"
        :include-pub-links false
