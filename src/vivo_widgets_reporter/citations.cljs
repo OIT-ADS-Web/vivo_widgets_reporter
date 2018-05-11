@@ -135,10 +135,10 @@
          ", " (extract-year startDate) "-" (extract-year endDate)
          )))
 
-(defn newsfeed-listing [{label :label {:keys [newsYear newsSource]} :attributes :as data}]
+(defn newsfeed-listing [{label :label {:keys [newsDatetime newsSource]} :attributes :as data}]
   (if (unavailable? data)
     "No data available."
-    (str label ". " newsYear ". "
+    (str label ". " (extract-month-day-year newsDatetime) ". "
        (if newsSource (str newsSource)) 
         )))
 
