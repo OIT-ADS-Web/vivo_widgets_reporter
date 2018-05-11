@@ -12,6 +12,7 @@
                                                      activity-list
                                                      art-citations
                                                      past-listing
+                                                     academic-listing
                                                      ]]
             ))
 
@@ -77,11 +78,11 @@
     (if include-artisticWorks
       (report-section "Artistic Works" (art-citations artisticWorks)))
     (if include-licenses (list-section "Medical Licensure" (map :label licenses)))
-;;    (if include-pastAppointments (list-section "Duke Appointment History" (map :label pastAppointments)))
     (if include-pastAppointments
       (list-section "Duke Appointment History" (map #(past-listing %) pastAppointments)))
     (if include-leadershipPositions (dangerous-html-section "Leadership & Clinical Positions" leadershipPositions))
-    (if include-academicPositions (list-section "Academic Positions Outside Duke" (map :label academicPositions)))
+    (if include-academicPositions
+      (list-section "Academic Positions Outside Duke" (map #(academic-listing %) academicPositions)))
     (if include-interestsOverview (dangerous-html-section "Current Research Interests" interestsOverview))
     (if include-gifts (list-section "Fellowships, Supported Research, & Other Grants" (map :label gifts)))
     (if include-artisticEvents (list-section "Exhibitions, Screenings, & Performances" (map :label artisticEvents)))

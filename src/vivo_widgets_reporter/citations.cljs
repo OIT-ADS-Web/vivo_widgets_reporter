@@ -151,6 +151,13 @@
       (str) ", " (extract-year startYear) "-" (extract-year endYear)
       )))
 
+(defn academic-listing [{label :label {:keys [startDate endDate]} :attributes :as data}]
+  (if (unavailable? data)
+    "No data available."
+    (str label
+      (str ". ") (extract-year startDate) "-" (extract-year endDate)
+      )))
+
 (defn award-listing [data]
   (if (unavailable? data)
     "No data available."
