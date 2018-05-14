@@ -12,7 +12,7 @@
                 (= "127.0.0.1" doc-domain) ; testing
                 (= "localhost" doc-domain)) ; local dev server
       doc-domain
-      "scholars2-test.oit.duke.edu")
+      "scholars.duke.edu")
     )
   )
 
@@ -68,6 +68,11 @@
 (defn set-overview [json owner]
   (handle-new-field-data owner :overview (:overview json))
   (handle-new-field-data owner :mentorship (create-mentorship json))
+  (handle-new-field-data owner :leadershipPositions (:leadershipPositions json))
+  (handle-new-field-data owner :interestsOverview (:interestsOverview json))
+  (handle-new-field-data owner :teachingActivities (:teachingActivities json))
+  (handle-new-field-data owner :academicActivities (:academicActivities json))
+  (handle-new-field-data owner :clinicalOverview (:clinicalOverview json))
   (om/set-state! owner :heading (create-heading json))
   (om/set-state! owner :subheading (create-subheading json))
   (when-let [format (:preferredCitationFormat json)]
@@ -79,7 +84,7 @@
     (dorun (map #(handle-new-field-data owner % (% json-in-clojure))
                 [:positions :geographicalFocus :awards :courses :grants
                  :professionalActivities :publications
-                 :artisticWorks])
+                 :artisticWorks :licenses :pastAppointments :academicPositions :gifts :artisticEvents :newsfeeds])
            )
     (set-overview (:attributes json-in-clojure) owner)
     )
@@ -107,6 +112,7 @@
     (get-and-set owner (base-field-url "publications") :publications)
     (get-and-set owner (base-field-url "artistic_works") :artisticWorks)
     (get-and-set owner (base-field-url "grants") :grants)
+    (get-and-set owner (base-field-url "newsfeeds") :newsfeeds)
     (get-and-set owner (base-field-url "awards") :awards)
     (get-and-set owner
                  (base-field-url "professional_activities")

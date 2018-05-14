@@ -68,27 +68,27 @@
 
 (defn type->header [vivoType data]
   (cond
-    (re-matches #".*AcademicArticle" vivoType) "Academic Articles"
-    (re-matches #".*OtherArticle" vivoType)    "Other Articles"
-    (re-matches #".*ConferencePaper" vivoType) "Conference Papers"
-    (re-matches #".*Dataset" vivoType)         "Datasets"
-    (re-matches #".*Software" vivoType)        "Software"
-    (re-matches #".*DigitalPublication" vivoType) "Digital Publications"
+    (re-matches #".*AcademicArticle" vivoType)        "Academic Articles"
+    (re-matches #".*OtherArticle" vivoType)           "Other Articles"
+    (re-matches #".*ConferencePaper" vivoType)        "Conference Papers"
+    (re-matches #".*Dataset" vivoType)                "Datasets"
+    (re-matches #".*Software" vivoType)               "Software"
+    (re-matches #".*DigitalPublication" vivoType)     "Digital Publications"
     ;Matches "EditedBook" too
-    (re-matches #".*Book" vivoType)            "Books"
-    (re-matches #".*Report" vivoType)          "Reports"
-    (re-matches #".*Thesis" vivoType)          "Theses"
-    (re-matches #".*BookSection" vivoType)     "Book Sections"
+    (re-matches #".*Book" vivoType)                   "Books"
+    (re-matches #".*Report" vivoType)                 "Reports"
+    (re-matches #".*Thesis" vivoType)                 "Theses"
+    (re-matches #".*BookSection" vivoType)            "Book Sections"
 
-    (re-matches #".*MultipleTypes" vivoType) "Multiple Types"
-    (re-matches #".*Exhibit" vivoType) "Exhibits"
-    (re-matches #".*Installation" vivoType) "Installations"
-    (re-matches #".*Photograph" vivoType) "Photography"
+    (re-matches #".*MultipleTypes" vivoType)          "Multiple Types"
+    (re-matches #".*Exhibit" vivoType)                "Exhibits"
+    (re-matches #".*Installation" vivoType)           "Installations"
+    (re-matches #".*Photograph" vivoType)             "Photography"
     (re-matches #".*RadioTelevisionProgram" vivoType) "Radio / Television"
-    (re-matches #".*Script" vivoType) "Scripts"
-    (re-matches #".*VideoRecording" vivoType) "Video"
-    (re-matches #".*Outreach" vivoType) "Outreach"
-    (re-matches #".*Presentation" vivoType) "Presentations"
+    (re-matches #".*Script" vivoType)                 "Scripts"
+    (re-matches #".*VideoRecording" vivoType)         "Video"
+    (re-matches #".*Outreach" vivoType)               "Outreach"
+    (re-matches #".*Presentation" vivoType)           "Presentations"
     (re-matches #".*ServiceToTheProfession" vivoType) "Service to the Profession"
     (re-matches #".*ServiceToTheUniversity" vivoType) "Service to Duke University"
     (re-matches #".*duke-art-extension.*" vivoType)
@@ -135,11 +135,46 @@
          ", " (extract-year startDate) "-" (extract-year endDate)
          )))
 
+(defn newsfeed-listing [{label :label {:keys [newsDatetime newsSource]} :attributes :as data}]
+  (if (unavailable? data)
+    "No data available."
+    (str label ". " (extract-month-day-year newsDatetime) ". "
+       (if newsSource (str newsSource)) 
+        )))
+
+(defn past-listing [{label :label {:keys [startYear endYear
+                                          organizationLabel]} :attributes :as data}]
+  (if (unavailable? data)
+    "No data available."
+    (str label
+      (str) ", " (extract-year startYear) "-" (extract-year endYear)
+      )))
+
+(defn academic-listing [{label :label {:keys [startDate endDate]} :attributes :as data}]
+  (if (unavailable? data)
+    "No data available."
+    (str label
+      (str ". ") (extract-year startDate) "-" (extract-year endDate)
+      )))
+
+(defn gift-listing [{label :label {:keys [dateTimeStart dateTimeEnd donor]} :attributes :as data}]
+  (if (unavailable? data)
+    "No data available."
+    (str label
+      (str " awarded by " donor ". ") (extract-year dateTimeStart) "-" (extract-year dateTimeEnd)
+      )))
+
+(defn art-event-listing [{label :label {:keys [venue startYear endYear]} :attributes :as data}]
+  (if (unavailable? data)
+    "No data available."
+    (str label
+      (str " at " venue ". ") (extract-month-day-year startYear) 
+      (if endYear (str " - " (extract-month-day-year endYear))) "."
+      )))
+
 (defn award-listing [data]
   (if (unavailable? data)
     "No data available."
     (str (:label data) " "
-         (extract-precise-date data) "."
-         )
-    )
-  )
+         (extract-precise-date data) ".")))
+

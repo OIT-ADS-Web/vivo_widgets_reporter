@@ -7,10 +7,14 @@
             [vivo_widgets_reporter.select :as select]
             [vivo_widgets_reporter.citations :refer [pub-citations
                                                      grant-listing
+                                                     newsfeed-listing
                                                      award-listing
                                                      activity-list
-                                                     art-citations]]
-            ))
+                                                     art-citations
+                                                     past-listing
+                                                     academic-listing
+                                                     gift-listing
+                                                     art-event-listing]]))
 
 (enable-console-print!)
 
@@ -27,6 +31,17 @@
                   (dom/div (clj->js {:dangerouslySetInnerHTML {:__html item}}))
                   ))
 
+(defn small-report-section [title content]
+  (dom/div #js {:id (string/replace (string/lower-case title) #"\s" "-")}
+    (dom/h3 nil title)
+    content
+    ))
+
+(defn small-dangerous-html-section [title item]
+  (small-report-section title
+                  (dom/div (clj->js {:dangerouslySetInnerHTML {:__html item}}))
+                  ))
+
 (defn list-section [title items]
   (report-section title (dom-utils/unstyled-list items)))
 
@@ -40,6 +55,17 @@
                                include-grants grants
                                include-professionalActivities professionalActivities
                                include-artisticWorks artisticWorks
+                               include-licenses licenses
+                               include-pastAppointments pastAppointments
+                               include-leadershipPositions leadershipPositions
+                               include-academicPositions academicPositions
+                               include-interestsOverview interestsOverview
+                               include-gifts gifts
+                               include-artisticEvents artisticEvents
+                               include-teachingActivities teachingActivities
+                               include-newsfeeds newsfeeds
+                               include-academicActivities academicActivities
+                               include-clinicalOverview clinicalOverview
                                include-publications publications
                                citation-format include-pub-links]}]
   (dom/div nil
@@ -48,7 +74,7 @@
     (if include-positions (list-section "Appointments" (map :label positions)))
     (if include-awards (list-section "Awards" (map #(award-listing %) awards)))
     (if include-geographicalFocus
-      (list-section "Geographical Focus"
+      (list-section "Global Scholarship"
                     (map #(str (:label %) ", "
                                (get-in % [:attributes :focusTypeLabel]))
                          geographicalFocus)))
@@ -57,9 +83,26 @@
       (list-section "Grants" (map #(grant-listing %) grants)))
     (if include-professionalActivities
       (report-section "Professional Activities"
-                    (activity-list professionalActivities)))
+        (activity-list professionalActivities)))
+    (if include-professionalActivities (small-dangerous-html-section "Academic & Administrative Activities" academicActivities))
+    (if include-professionalActivities (small-dangerous-html-section "Clinical Activities" clinicalOverview))
+
     (if include-artisticWorks
       (report-section "Artistic Works" (art-citations artisticWorks)))
+    (if include-licenses (list-section "Medical Licensure" (map :label licenses)))
+    (if include-pastAppointments
+      (list-section "Duke Appointment History" (map #(past-listing %) pastAppointments)))
+    (if include-leadershipPositions (dangerous-html-section "Leadership & Clinical Positions" leadershipPositions))
+    (if include-academicPositions
+      (list-section "Academic Positions Outside Duke" (map #(academic-listing %) academicPositions)))
+    (if include-interestsOverview (dangerous-html-section "Current Research Interests" interestsOverview))
+    (if include-gifts
+      (list-section "Fellowships, Supported Research, & Other Grants" (map #(gift-listing %) gifts)))
+    (if include-artisticEvents
+      (list-section "Exhibitions, Screenings, & Performances" (map #(art-event-listing %) artisticEvents)))
+    (if include-teachingActivities (dangerous-html-section "Teaching Activities" teachingActivities))
+    (if include-newsfeeds
+      (list-section "In the News" (map #(newsfeed-listing %) newsfeeds)))
     (if include-publications
       (report-section "Publications" (pub-citations publications
                                                     citation-format
@@ -136,6 +179,18 @@
        :include-grants true
        :include-professionalActivities true
 
+       :include-academicActivities true
+       :include-clinicalOverview true
+       :include-licenses true
+       :include-pastAppointments true
+       :include-leadershipPositions true
+       :include-academicPositions true
+       :include-interestsOverview true
+       :include-gifts true
+       :include-artisticEvents true
+       :include-teachingActivities true
+       :include-newsfeeds true
+
        :citation-format "chicagoCitation"
        :include-pub-links false
        }
@@ -179,11 +234,20 @@
             (include-checkbox owner state :include-mentorship "Mentorship")
             (include-checkbox owner state :include-positions "Appointments")
             (include-checkbox owner state :include-awards "Awards")
-            (include-checkbox owner state :include-geographicalFocus "Geographical Focus")
+            (include-checkbox owner state :include-geographicalFocus "Global Scholarship")
             (include-checkbox owner state :include-courses "Courses")
             (include-checkbox owner state :include-grants "Grants")
             (include-checkbox owner state :include-professionalActivities "Professional Activities")
             (include-checkbox owner state :include-artisticWorks "Artistic Works")
+            (include-checkbox owner state :include-licenses "Medical Licensure")
+            (include-checkbox owner state :include-pastAppointments "Duke Appointment History")
+            (include-checkbox owner state :include-leadershipPositions "Leadership & Clinical Positions")
+            (include-checkbox owner state :include-academicPositions "Academic Positions Outside Duke")
+            (include-checkbox owner state :include-interestsOverview "Current Research Interests")
+            (include-checkbox owner state :include-gifts "Fellowships, Supported Research, & Other Grants")
+            (include-checkbox owner state :include-artisticEvents "Exhibitions, Screenings, & Performances")
+            (include-checkbox owner state :include-teachingActivities "Teaching Activities")
+            (include-checkbox owner state :include-newsfeeds "In the News")
             (include-checkbox owner state :include-publications "Publications")
             )
           (dom/form #js {:className "form-horizontal span6"}
