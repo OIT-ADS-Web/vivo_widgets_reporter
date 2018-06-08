@@ -31,17 +31,6 @@
                   (dom/div (clj->js {:dangerouslySetInnerHTML {:__html item}}))
                   ))
 
-(defn small-report-section [title content]
-  (dom/div #js {:id (string/replace (string/lower-case title) #"\s" "-")}
-    (dom/h3 nil title)
-    content
-    ))
-
-(defn small-dangerous-html-section [title item]
-  (small-report-section title
-                  (dom/div (clj->js {:dangerouslySetInnerHTML {:__html item}}))
-                  ))
-
 (defn list-section [title items]
   (report-section title (dom-utils/unstyled-list items)))
 
@@ -54,6 +43,8 @@
                                include-courses courses
                                include-grants grants
                                include-professionalActivities professionalActivities
+                               include-academicActivities academicActivities
+                               include-clinicalOverview clinicalOverview
                                include-artisticWorks artisticWorks
                                include-licenses licenses
                                include-pastAppointments pastAppointments
@@ -64,50 +55,66 @@
                                include-artisticEvents artisticEvents
                                include-teachingActivities teachingActivities
                                include-newsfeeds newsfeeds
-                               include-academicActivities academicActivities
-                               include-clinicalOverview clinicalOverview
                                include-publications publications
                                citation-format include-pub-links]}]
   (dom/div nil
-    (if include-overview (dangerous-html-section "Overview" overview))
-    (if include-mentorship (dangerous-html-section "Mentorship Availability" mentorship))
-    (if include-positions (list-section "Appointments" (map :label positions)))
-    (if include-awards (list-section "Awards" (map #(award-listing %) awards)))
+    (if include-overview 
+      (dangerous-html-section "Overview" overview))
+    (if include-mentorship 
+      (dangerous-html-section "Mentorship Availability" mentorship))
+    (if include-positions 
+      (list-section "Appointments" 
+        (map :label positions)))
+    (if include-awards 
+      (list-section "Awards" 
+        (map #(award-listing %) awards)))
     (if include-geographicalFocus
       (list-section "Global Scholarship"
-                    (map #(str (:label %) ", "
-                               (get-in % [:attributes :focusTypeLabel]))
-                         geographicalFocus)))
-    (if include-courses (list-section "Courses" (map :label courses)))
+        (map #(str (:label %) ", "
+          (get-in % [:attributes :focusTypeLabel]))
+            geographicalFocus)))
+    (if include-courses 
+      (list-section "Courses" 
+        (map :label courses)))
     (if include-grants
-      (list-section "Grants" (map #(grant-listing %) grants)))
+      (list-section "Grants" 
+        (map #(grant-listing %) grants)))
     (if include-professionalActivities
       (report-section "Professional Activities"
         (activity-list professionalActivities)))
-    (if include-professionalActivities (small-dangerous-html-section "Academic & Administrative Activities" academicActivities))
-    (if include-professionalActivities (small-dangerous-html-section "Clinical Activities" clinicalOverview))
-
+    (if include-academicActivities 
+      (dangerous-html-section "Academic & Administrative Activities" academicActivities))
+    (if include-clinicalOverview 
+      (dangerous-html-section "Clinical Activities" clinicalOverview))
     (if include-artisticWorks
       (report-section "Artistic Works" (art-citations artisticWorks)))
     (if include-licenses (list-section "Medical Licensure" (map :label licenses)))
     (if include-pastAppointments
-      (list-section "Duke Appointment History" (map #(past-listing %) pastAppointments)))
-    (if include-leadershipPositions (dangerous-html-section "Leadership & Clinical Positions" leadershipPositions))
+      (list-section "Duke Appointment History" 
+        (map #(past-listing %) pastAppointments)))
+    (if include-leadershipPositions 
+      (dangerous-html-section "Leadership & Clinical Positions" leadershipPositions))
     (if include-academicPositions
-      (list-section "Academic Positions Outside Duke" (map #(academic-listing %) academicPositions)))
-    (if include-interestsOverview (dangerous-html-section "Current Research Interests" interestsOverview))
+      (list-section "Academic Positions Outside Duke" 
+        (map #(academic-listing %) academicPositions)))
+    (if include-interestsOverview 
+      (dangerous-html-section "Current Research Interests" interestsOverview))
     (if include-gifts
-      (list-section "Fellowships, Supported Research, & Other Grants" (map #(gift-listing %) gifts)))
+      (list-section "Fellowships, Supported Research, & Other Grants" 
+        (map #(gift-listing %) gifts)))
     (if include-artisticEvents
-      (list-section "Exhibitions, Screenings, & Performances" (map #(art-event-listing %) artisticEvents)))
-    (if include-teachingActivities (dangerous-html-section "Teaching Activities" teachingActivities))
+      (list-section "Exhibitions, Screenings, & Performances" 
+        (map #(art-event-listing %) artisticEvents)))
+    (if include-teachingActivities 
+      (dangerous-html-section "Teaching Activities" teachingActivities))
     (if include-newsfeeds
-      (list-section "In the News" (map #(newsfeed-listing %) newsfeeds)))
+      (list-section "In the News" 
+        (map #(newsfeed-listing %) newsfeeds)))
     (if include-publications
-      (report-section "Publications" (pub-citations publications
-                                                    citation-format
-                                                    include-pub-links
-                                                    )))
+      (report-section "Publications" 
+        (pub-citations publications
+                       citation-format
+                       include-pub-links)))
    ))
 
 (defn update-preference [e owner preference]
@@ -178,7 +185,6 @@
        :include-courses true
        :include-grants true
        :include-professionalActivities true
-
        :include-academicActivities true
        :include-clinicalOverview true
        :include-licenses true
@@ -190,7 +196,6 @@
        :include-artisticEvents true
        :include-teachingActivities true
        :include-newsfeeds true
-
        :citation-format "chicagoCitation"
        :include-pub-links false
        }
@@ -238,6 +243,8 @@
             (include-checkbox owner state :include-courses "Courses")
             (include-checkbox owner state :include-grants "Grants")
             (include-checkbox owner state :include-professionalActivities "Professional Activities")
+            (include-checkbox owner state :include-academicActivities "Academic & Administrative Activities")
+            (include-checkbox owner state :include-clinicalOverview "Clinical Activities")
             (include-checkbox owner state :include-artisticWorks "Artistic Works")
             (include-checkbox owner state :include-licenses "Medical Licensure")
             (include-checkbox owner state :include-pastAppointments "Duke Appointment History")
