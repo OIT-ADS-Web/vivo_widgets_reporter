@@ -2,7 +2,7 @@ services:
   generate-production:
     build:
       context: .
-    command: nix develop --command bash -c 'lein cljsbuild once production && mkdir out && cp production.html out/ && cp -R assets out/'
+    command: nix develop --command bash -c 'lein cljsbuild once production && mkdir -p out && cp production.html out/ && cp -R assets out/'
     volumes:
       - .:/app
 
