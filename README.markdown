@@ -26,7 +26,7 @@ want to compile once, run:
 
     lein cljsbuild once development
 
-## Deployment
+## Deployment (legacy 4/17/2024)
 
 There is a bash script to handle deployment. You can run it like this:
 
@@ -79,21 +79,37 @@ The tests also require Ruby (~ 2.1) and that you are compiling your ClojureScrip
 The tests currently hit live data, so it is possible that this will cause
 intermittent failures.
 
-### Using nixpkgs
+## Using nixpkgs
 
-If you have nixpkgs install with 
-[flakes enabled](https://nixos.wiki/wiki/Flakes), you can run the following 
+If you have nixpkgs install with
+[flakes enabled](https://nixos.wiki/wiki/Flakes), you can run the following
 command to start a shell with java 8 and lein in the path:
 
-```
+```bash
 $ nix develop
 ```
 
 If you have nixpkgs setup with direnv, you can run the following to create
 a `.envrc` file and if you allow it, it will load the environment.
 
-```
+```bash
 $ echo 'use flake' > .envrc
 ...
 $ direnv allow
+```
+
+## Generate Production Script
+
+To generate production files that get put in the "out" directorry in this
+project, run the following command:
+
+```bash
+$ docker-compose up generate-production
+```
+
+If you are using podman, it can use the same `docker-compose.yml` file
+with this command:
+
+```bash
+$ podman compose up generate-production
 ```
