@@ -98,7 +98,7 @@ $ echo 'use flake' > .envrc
 $ direnv allow
 ```
 
-## Generate Production Script
+## Generate Production Static Files
 
 To generate production files that get put in the "out" directorry in this
 project, run the following command:
