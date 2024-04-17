@@ -11,3 +11,6 @@ pom.xml
 vivo_widgets_reporter.*.js
 .sass-cache
 .DS_Store
+/.direnv
+/.envrc
+

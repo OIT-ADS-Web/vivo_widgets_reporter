@@ -78,3 +78,22 @@ The tests also require Ruby (~ 2.1) and that you are compiling your ClojureScrip
 
 The tests currently hit live data, so it is possible that this will cause
 intermittent failures.
+
+### Using nixpkgs
+
+If you have nixpkgs install with 
+[flakes enabled](https://nixos.wiki/wiki/Flakes), you can run the following 
+command to start a shell with java 8 and lein in the path:
+
+```
+$ nix develop
+```
+
+If you have nixpkgs setup with direnv, you can run the following to create
+a `.envrc` file and if you allow it, it will load the environment.
+
+```
+$ echo 'use flake' > .envrc
+...
+$ direnv allow
+```
